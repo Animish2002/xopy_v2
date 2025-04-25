@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
-import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
 // Define the user interface
@@ -68,7 +67,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       localStorage.setItem("authToken", newToken);
       localStorage.setItem("sessionId", decoded.userId.toString());
       localStorage.setItem("role", decoded.role);
-      Cookies.set("authtoken", newToken, { secure: true, sameSite: "strict" });
+     
 
       // Set user state
       setUser({
