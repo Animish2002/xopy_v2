@@ -5,6 +5,7 @@ import Mission from "./Mission";
 import Team from "./Team";
 import XopyFeatures from "./Features";
 import Footer from "./Footer";
+import ContactUs from "./ContactUs";
 
 const Home = () => {
   return (
@@ -14,7 +15,7 @@ const Home = () => {
       <Mission />
       <XopyFeatures />
       <Team />
-
+      <ContactUs />
       <Footer />
     </div>
   );

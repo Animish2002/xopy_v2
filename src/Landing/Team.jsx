@@ -71,7 +71,7 @@ const Team = () => {
   };
 
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section id="team" className="py-20 relative overflow-hidden">
       {/* Background decorative elements  bg-gradient-to-b from-yellow-50 to-white dark:from-gray-900 dark:to-gray-800*/}
       <div className="absolute top-0 left-0 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>

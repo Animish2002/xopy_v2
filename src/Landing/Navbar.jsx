@@ -46,12 +46,13 @@ const Navbar = () => {
   // Handle navigation
   const handleNavigation = (path, e) => {
     e.preventDefault();
-    // Use history API for SPA-like navigation without React Router
-    window.history.pushState({}, "", path);
-    // You could also dispatch a custom event to handle page changes
-    window.dispatchEvent(
-      new CustomEvent("navigationchange", { detail: { path } })
-    );
+    const element = document.getElementById(path.split("#")[1]);
+    if (element) {
+      window.scrollTo({
+        top: element.offsetTop - 70,
+        behavior: "smooth",
+      });
+    }
   };
 
   // Detect scroll to change header background
@@ -141,88 +142,25 @@ const Navbar = () => {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent">
-                  Features
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {["Analytics", "Automation", "Reporting", "Security"].map(
-                      (feature, i) => (
-                        <motion.li
-                          key={feature}
-                          custom={i}
-                          variants={listItemVariants}
-                          initial="hidden"
-                          whileInView="visible"
-                          viewport={{ once: true }}
-                        >
-                          <NavigationMenuLink asChild>
-                            <a
-                              href={`#${feature.toLowerCase()}`}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleScrollTo(feature.toLowerCase());
-                              }}
-                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                            >
-                              <div className="text-sm font-medium leading-none">
-                                {feature}
-                              </div>
-                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                Discover our powerful {feature.toLowerCase()}{" "}
-                                tools
-                              </p>
-                            </a>
-                          </NavigationMenuLink>
-                        </motion.li>
-                      )
-                    )}
-                  </ul>
-                </NavigationMenuContent>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <button onClick={(e) => handleNavigation("/features", e)}>
+                    Features
+                  </button>
+                </NavigationMenuLink>
               </NavigationMenuItem>
-
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent">
-                  Resources
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid gap-3 p-4 w-[200px]">
-                    {["Documentation", "Blog", "Support"].map((resource, i) => (
-                      <motion.li
-                        key={resource}
-                        custom={i}
-                        variants={listItemVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                      >
-                        <NavigationMenuLink asChild>
-                          <a
-                            href={`/${resource.toLowerCase()}`}
-                            onClick={(e) =>
-                              handleNavigation(`/${resource.toLowerCase()}`, e)
-                            }
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none">
-                              {resource}
-                            </div>
-                          </a>
-                        </NavigationMenuLink>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <button onClick={(e) => handleNavigation("/team", e)}>
+                    About Us
+                  </button>
+                </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  <a
-                    href="/pricing"
-                    onClick={(e) => handleNavigation("/pricing", e)}
-                  >
-                    Pricing
-                  </a>
+                  <button onClick={(e) => handleNavigation("/contact-form", e)}>
+                    Contact Us
+                  </button>
                 </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -243,7 +181,7 @@ const Navbar = () => {
               variant="default"
               className="rounded-full px-6 py-2 font-medium"
             >
-              <Link to="/sign-in">Sign Up</Link>
+              <Link to="/sign-in">Get Started</Link>
             </Button>
           </div>
 
