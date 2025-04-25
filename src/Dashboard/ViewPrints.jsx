@@ -4,7 +4,11 @@ import Layout from "./Layout";
 const ViewPrints = () => {
   return (
     <Layout>
-      <div>ViewPrints</div>
+      <div className="p-4">
+        <div className="p-4 md:text-2xl text-lg ui font-semibold">
+          View Prints
+        </div>
+      </div>
     </Layout>
   );
 };
