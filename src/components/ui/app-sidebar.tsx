@@ -27,7 +27,7 @@ import logo from "../../assets/xopyLogo.png";
 const items = [
   {
     title: "Dashboard",
-    url: "dashboard-home",
+    url: "dashboard",
     icon: Home,
   },
   {
