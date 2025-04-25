@@ -175,3 +175,11 @@
 .ui {
   font-family: "ui", sans-serif;
 }
+
+.mission {
+  background-image: url("./assets/XopyFeatures/liquid-cheese.png");
+  width: 100%;
+  object-fit: contain;
+  background-size: cover;
+}
+
