@@ -1,11 +1,13 @@
 import {
-  Calendar,
   Home,
-  Inbox,
-  Search,
   Settings,
   HelpCircle,
   Share2,
+  Printer,
+  QrCode,
+  DollarSign,
+  ClipboardList,
+
 } from "lucide-react";
 import {
   Sidebar,
@@ -25,28 +27,28 @@ import logo from "../../assets/xopyLogo.png";
 const items = [
   {
     title: "Dashboard",
-    url: "home",
+    url: "dashboard-home",
     icon: Home,
   },
   {
     title: "View All Prints",
-    url: "#",
-    icon: Inbox,
+    url: "view-prints",
+    icon: Printer,
   },
   {
     title: "Download QR Code",
-    url: "#",
-    icon: Calendar,
+    url: "downloadQR",
+    icon: QrCode,
   },
   {
     title: "Add Pricing",
-    url: "#",
-    icon: Search,
+    url: "add-pricing",
+    icon: DollarSign,
   },
   {
     title: "View Pricing",
-    url: "#",
-    icon: HelpCircle,
+    url: "view-pricing",
+    icon: ClipboardList,
   },
   {
     title: "Settings",

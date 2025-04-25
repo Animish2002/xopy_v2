@@ -1,12 +1,12 @@
 import React from "react";
 import Layout from "./Layout";
 
-const AddPricing = () => {
+const ViewPricing = () => {
   return (
     <Layout>
-      <div>AddPricing</div>
+      <div>ViewPricing</div>
     </Layout>
   );
 };
 
-export default AddPricing;
+export default ViewPricing;

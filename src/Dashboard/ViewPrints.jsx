@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Layout from "./Layout";
 
 const ViewPrints = () => {
   return (
-    <div>ViewPrints</div>
-  )
-}
+    <Layout>
+      <div>ViewPrints</div>
+    </Layout>
+  );
+};
 
-export default ViewPrints
+export default ViewPrints;

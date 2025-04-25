@@ -17,7 +17,7 @@ export function AppHeader({
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   return (
-    <header className="h-16 border-b flex items-center justify-between px-4 bg-white">
+    <header className="h-15 border-b flex items-center justify-between px-4 bg-white">
       {/* Left section with menu toggle */}
       <div className="flex items-center gap-4">
         <button
