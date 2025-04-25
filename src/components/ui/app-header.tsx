@@ -1,4 +1,4 @@
-import { Bell, ChevronDown, Menu, Search, User } from "lucide-react";
+import { Bell, ChevronDown, Menu, User } from "lucide-react";
 import { useState } from "react";
 import { useSidebar } from "./sidebar";
 
