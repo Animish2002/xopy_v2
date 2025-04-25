@@ -296,7 +296,7 @@ const HeroSection = () => {
                   transition={{ delay: 1.2, duration: 0.8 }}
                 >
                   <Card className="shadow-lg w-44 md:w-56 bg-white/90 backdrop-blur border-0">
-                    <CardContent className="p-2">
+                    <CardContent className="md:p-4 p-2">
                       <div className="flex items-center mb-2">
                         <Download className="h-5 w-5 text-green-500 mr-2" />
                         <span className="text-sm font-medium">

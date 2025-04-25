@@ -27,8 +27,6 @@ export function AppHeader({
         >
           <Menu className="h-5 w-5" />
         </button>
-        
-       
       </div>
 
       {/* Right section with notifications and user profile */}
@@ -38,16 +36,20 @@ export function AppHeader({
           <Bell className="h-5 w-5" />
           <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
         </button>
-        
+
         {/* User profile dropdown */}
         <div className="relative">
-          <button 
+          <button
             className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100"
             onClick={() => setShowUserMenu(!showUserMenu)}
           >
             <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
               {userAvatar ? (
-                <img src={userAvatar} alt={userName} className="h-8 w-8 rounded-full" />
+                <img
+                  src={userAvatar}
+                  alt={userName}
+                  className="h-8 w-8 rounded-full"
+                />
               ) : (
                 <User className="h-5 w-5 text-gray-500" />
               )}
@@ -58,19 +60,28 @@ export function AppHeader({
             </div>
             <ChevronDown className="h-4 w-4" />
           </button>
-          
+
           {/* Dropdown menu */}
           {showUserMenu && (
             <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border z-10">
-              <div className="p-2">
-                <a href="#profile" className="block px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
+              <div className="md:p-4 p-2">
+                <a
+                  href="#profile"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100 rounded-md"
+                >
                   Profile
                 </a>
-                <a href="#account" className="block px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
+                <a
+                  href="#account"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100 rounded-md"
+                >
                   Account Settings
                 </a>
                 <hr className="my-1" />
-                <a href="#logout" className="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100 rounded-md">
+                <a
+                  href="#logout"
+                  className="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100 rounded-md"
+                >
                   Logout
                 </a>
               </div>
