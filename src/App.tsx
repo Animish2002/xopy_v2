@@ -14,7 +14,6 @@ import ViewPricing from "./Dashboard/ViewPricing";
 import AllUser from "./Admin/AllUser";
 
 function App() {
-  
   return (
     <AuthProvider>
       <Router>
@@ -24,9 +23,9 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/preferences/:id" element={<Preferences />} />
 
-          {/* <Route element={<AdminRoute />}> */}
+          <Route element={<AdminRoute />}>
             <Route path="/admin/dashboard" element={<AllUser />} />
-          {/* </Route> */}
+          </Route>
 
           <Route element={<ShopownerRoute />}>
             <Route path="/shopowner/dashboard" element={<DashboardHome />} />
