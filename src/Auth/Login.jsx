@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 import axios from "axios";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { Alert, AlertDescription } from '../components/ui/alert';
+import { Alert, AlertDescription } from "../components/ui/alert";
 import {
   Card,
   CardContent,
@@ -52,6 +52,7 @@ const Signup = () => {
       if (response.data) {
         const { token, user } = response.data;
         login(token);
+        // localStorage.setItem("userName", user.name);
         setSuccess(`Welcome back, ${user.role}!`);
 
         if (user.role === "ShopOwner") {
@@ -84,15 +85,11 @@ const Signup = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900 p-4">
       {/* Logo */}
-      
+
       <div className="absolute top-6 left-6">
-        <img 
-          src={logo} 
-          alt="Xopy Logo" 
-          className="h-24 w-auto" 
-        />
+        <img src={logo} alt="Xopy Logo" className="h-24 w-auto" />
       </div>
-      
+
       <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center bg-white rounded-lg shadow-2xl p-8">
         {/* Left Column - Info */}
         <div className="space-y-6 p-4">
@@ -101,19 +98,23 @@ const Signup = () => {
               Welcome back
             </h1>
             <p className="text-lg text-gray-600">
-              Seamlessly access your account with our intuitive login system. Get back to what matters most.
+              Seamlessly access your account with our intuitive login system.
+              Get back to what matters most.
             </p>
           </div>
           <div className="hidden md:block relative">
-            <img 
+            <img
               src={LoginIllustration}
-              alt="Login illustration" 
-              className="rounded-lg object-cover" 
+              alt="Login illustration"
+              className="rounded-lg object-cover"
             />
           </div>
           <div className="text-sm">
             <span className="text-gray-600">New to our platform? </span>
-            <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500 underline-offset-4 hover:underline">
+            <Link
+              to="/register"
+              className="font-medium text-blue-600 hover:text-blue-500 underline-offset-4 hover:underline"
+            >
               Create an account
             </Link>
           </div>
@@ -141,7 +142,10 @@ const Signup = () => {
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Email
                   </label>
                   <Input
@@ -156,14 +160,17 @@ const Signup = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Password
                   </label>
-                  <Link 
-                    to="/forgetPassword" 
+                  <Link
+                    to="/forgetPassword"
                     className="text-sm font-medium text-blue-600 hover:text-blue-500"
                   >
                     Forgot password?
@@ -195,15 +202,16 @@ const Signup = () => {
                 {/* If you want to add form validation error messages */}
                 {/* <p className="text-sm text-red-600">Error message here</p> */}
               </div>
-              
-              <Button 
-                type="submit" 
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium" 
+
+              <Button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium"
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                    wait
                   </>
                 ) : (
                   "Sign In"

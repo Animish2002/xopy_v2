@@ -1,18 +1,19 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
 import { jwtDecode } from "jwt-decode";
 
-// Define the user interface
+// Define the user interface based on actual token structure
 interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: "Admin" | "ShopOwner";
 }
 
-// Define the token payload interface
+// Define the token payload interface to match your actual token
 interface TokenPayload {
-  userId: number;
+  id: string;
   email: string;
+  name: string;
   role: "Admin" | "ShopOwner";
   iat: number;
   exp: number;
@@ -46,10 +47,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           return null;
         }
         return {
-          id: decoded.userId,
+          id: decoded.id,
           email: decoded.email,
           role: decoded.role,
-          name: localStorage.getItem("userName") || "User",
+          name: decoded.name,
         };
       } catch (error) {
         localStorage.clear();
@@ -65,16 +66,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       // Store token in localStorage
       localStorage.setItem("authToken", newToken);
-      localStorage.setItem("sessionId", decoded.userId.toString());
+      localStorage.setItem("sessionId", decoded.id.toString());
+      localStorage.setItem("userName", decoded.name);
       localStorage.setItem("role", decoded.role);
-     
 
       // Set user state
       setUser({
-        id: decoded.userId,
+        id: decoded.id,
         email: decoded.email,
         role: decoded.role,
-        name: localStorage.getItem("userName") || "User",
+        name: decoded.name,
       });
     } catch (error) {
       console.error("Invalid token", error);

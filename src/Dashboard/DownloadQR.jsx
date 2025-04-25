@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Download, Share2, Printer, RefreshCw } from "lucide-react";
 import Layout from "./Layout";
 import html2canvas from "html2canvas";
+import logo from "../assets/xopyLogo.png";
 
 // Import ShadCN components
 import {
@@ -25,39 +26,39 @@ const DownloadQR = () => {
   const qrContainerRef = useRef(null);
   const currentUrl = window.location.href;
 
+  const generateQR = async () => {
+    setLoading(true);
+    try {
+      const id = localStorage.getItem("sessionId");
+      const url = new URL(
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/generate-qr/${id}`
+      );
+      url.searchParams.append("url", currentUrl);
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to generate QR code");
+      }
+
+      const data = await response.json();
+      setQrCodeBase64(data.qrCodeUrl);
+      setError("");
+    } catch (error) {
+      setError("Failed to generate QR code. Please try again.");
+      console.error("QR generation failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     // Get user's name from localStorage or set default
     const storedName = localStorage.getItem("userName") || "User";
     setUserName(storedName);
-
-    const generateQR = async () => {
-      setLoading(true);
-      try {
-        const id = localStorage.getItem("sessionId");
-        const url = new URL(
-          `${process.env.REACT_APP_API}/auth/generate-qr/${id}`
-        );
-        url.searchParams.append("url", currentUrl);
-
-        const response = await fetch(url, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to generate QR code");
-        }
-
-        const data = await response.json();
-        setQrCodeBase64(data.qrCodeUrl);
-        setError("");
-      } catch (error) {
-        setError("Failed to generate QR code. Please try again.");
-        console.error("QR generation failed:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
     generateQR();
   }, [currentUrl]);
@@ -70,6 +71,14 @@ const DownloadQR = () => {
       const canvas = await html2canvas(qrContainerRef.current, {
         scale: 3, // Higher resolution
         backgroundColor: null,
+        // Add this option to fix the oklch color function issue
+        ignoreElements: (element) => {
+          // Skip elements with oklch colors
+          const style = window.getComputedStyle(element);
+          return style.backgroundColor?.includes('oklch') || 
+                 style.color?.includes('oklch') ||
+                 style.borderColor?.includes('oklch');
+        },
       });
 
       // Convert canvas to data URL
@@ -98,9 +107,9 @@ const DownloadQR = () => {
     <Layout>
       <div className="md:p-4 p-2">
         <div className="p-4 md:text-2xl text-lg ui font-semibold">
-          Download OR
+          Download QR
         </div>
-        <div className="container mx-auto max-w-2xl py-6 md:px-4">
+        <div className="container mx-auto max-w-2xl py-2 md:px-4">
           <Card className="shadow-lg">
             <CardHeader className="text-center border-b pb-6">
               <div className="mx-auto mb-2">
@@ -137,10 +146,12 @@ const DownloadQR = () => {
                   >
                     {/* Logo header */}
                     <div className="flex items-center justify-center mb-6">
-                      <Avatar className="h-10 w-10 bg-yellow-500 mr-2">
-                        <AvatarFallback className="font-bold text-white">
-                          X
-                        </AvatarFallback>
+                      <Avatar className=" w-14 h-12  mr-2">
+                        <img
+                          src={logo}
+                          alt="Xopy Logo"
+                          className="w-full h-full"
+                        />
                       </Avatar>
                       <span className="text-2xl font-bold text-gray-800">
                         Xopy
