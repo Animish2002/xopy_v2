@@ -8,10 +8,8 @@ import { Eye, ShoppingCart, Package, Users } from "lucide-react";
 const DashboardHome = () => {
   return (
     <Layout>
-      <div className="p-4">
-        <div className="p-4 md:text-2xl text-lg ui font-semibold">
-          Home
-        </div>
+      <div className="p-2">
+        <div className="p-4 md:text-2xl text-lg ui font-semibold">Home</div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
           <CardDataStats
             title="Total views"

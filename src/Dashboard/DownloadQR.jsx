@@ -96,8 +96,10 @@ const DownloadQR = () => {
 
   return (
     <Layout>
-      <div className="p-4">
-        <div className="p-4 md:text-2xl text-lg ui font-semibold">Download OR</div>
+      <div className="p-2">
+        <div className="p-4 md:text-2xl text-lg ui font-semibold">
+          Download OR
+        </div>
         <div className="container mx-auto max-w-2xl py-6 px-4">
           <Card className="shadow-lg">
             <CardHeader className="text-center border-b pb-6">
