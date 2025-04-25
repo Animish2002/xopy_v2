@@ -10,7 +10,7 @@ const Settings = () => {
           <div className="p-4 md:text-2xl text-lg ui font-semibold">
             General Settings
           </div>
-          <div className="mx-auto w-10/12">
+          <div className="mx-auto md:w-10/12 w-full">
             <div className="col-span-5 xl:col-span-3">
               <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="border-b border-stroke py-4 px-7 dark:border-strokedark">
