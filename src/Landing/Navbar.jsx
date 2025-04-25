@@ -181,7 +181,7 @@ const Navbar = () => {
               variant="default"
               className="rounded-full px-6 py-2 font-medium"
             >
-              <Link to="/sign-in">Get Started</Link>
+              <Link to="/auth/signin">Get Started</Link>
             </Button>
           </div>
 
@@ -221,8 +221,8 @@ const Navbar = () => {
 
                   <div className="pt-6 mt-6 border-t">
                     <a
-                      href="/sign-in"
-                      onClick={(e) => handleNavigation("/sign-in", e)}
+                      href="/auth/signin"
+                      onClick={(e) => handleNavigation("/auth/signin", e)}
                     >
                       <Button className="w-full rounded-full">Sign Up</Button>
                     </a>

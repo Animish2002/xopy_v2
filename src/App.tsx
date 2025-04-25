@@ -1,6 +1,7 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import DashboardHome from "./Dashboard/DashboardHome";
 import { AuthProvider } from "./utils/AuthContext";
+import { AdminRoute, ShopownerRoute } from "./utils/ProtectedRoute";
 import Signup from "./Auth/Login";
 import Register from "./Auth/Register";
 import Preferences from "./EndUser/Preferences";
@@ -12,23 +13,30 @@ import Home from "./Landing/Home";
 import ViewPricing from "./Dashboard/ViewPricing";
 
 function App() {
+  
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/sign-in" element={<Signup />} />
+          <Route path="/auth/signin" element={<Signup />} />
           <Route path="/register" element={<Register />} />
-    
           <Route path="/preferences/:id" element={<Preferences />} />
-          <Route path="/dashboard" element={<DashboardHome />} />
-          <Route path="/downloadQR" element={<DownloadQR />} />
-          <Route path="/add-pricing" element={<AddPricing />} />
-          <Route path="/view-pricing" element={<ViewPricing />} />
-          <Route path="/view-prints" element={<ViewPrints />} />
-          <Route path="/setting" element={<Setting />} />
+
+          <Route element={<AdminRoute />}>
+            <Route path="/admin/dashboard" element={<DashboardHome />} />
+          </Route>
+
+          <Route element={<ShopownerRoute />}>
+            <Route path="/shopowner/dashboard" element={<DashboardHome />} />
+            <Route path="/shopowner/downloadQR" element={<DownloadQR />} />
+            <Route path="/shopowner/add-pricing" element={<AddPricing />} />
+            <Route path="/shopowner/view-pricing" element={<ViewPricing />} />
+            <Route path="/shopowner/view-prints" element={<ViewPrints />} />
+            <Route path="/shopowner/setting" element={<Setting />} />
+          </Route>
         </Routes>
-      </BrowserRouter>
+      </Router>
     </AuthProvider>
   );
 }

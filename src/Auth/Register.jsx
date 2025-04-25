@@ -134,7 +134,6 @@ const Register = () => {
       setIsLoading(false);
     }
   };
-  
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -184,7 +183,7 @@ const Register = () => {
           <div className="text-sm">
             <span className="text-gray-600">Already have an account? </span>
             <Link
-              to="/sign-in"
+              to="/auth/signin"
               className="font-medium text-blue-600 hover:text-blue-500 underline-offset-4 hover:underline"
             >
               Sign in

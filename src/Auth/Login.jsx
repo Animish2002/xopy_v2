@@ -45,7 +45,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API}/auth/login`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/login`,
         formData
       );
 
@@ -55,7 +55,7 @@ const Signup = () => {
         setSuccess(`Welcome back, ${user.role}!`);
 
         if (user.role === "ShopOwner") {
-          navigate("/shopowner");
+          navigate("/shopowner/dashboard");
         } else if (user.role === "Admin") {
           navigate("/admin");
         } else {
