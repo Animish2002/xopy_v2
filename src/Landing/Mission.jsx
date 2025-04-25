@@ -43,7 +43,7 @@ const Mission = () => {
 
   return (
     <div className="md:mt-10">
-      <div className="flex justify-center items-center mt-16 px-2 mission h-80 relative ui">
+      <div className="flex justify-center items-center mb-12 mt-16 px-2 mission h-80 relative">
         <motion.div
           ref={ref}
           initial="hidden"
