@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import SideImage from "../assets/landingPage1.png";
+import { Link, useNavigate } from "react-router-dom";
 
 // Import shadcn components
 import { Button } from "../components/ui/button";
