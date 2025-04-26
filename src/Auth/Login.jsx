@@ -112,7 +112,7 @@ const Signup = () => {
           <div className="text-sm">
             <span className="text-gray-600">New to our platform? </span>
             <Link
-              to="/register"
+              to="/auth/register"
               className="font-medium text-blue-600 hover:text-blue-500 underline-offset-4 hover:underline"
             >
               Create an account

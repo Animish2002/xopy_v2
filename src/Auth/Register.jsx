@@ -21,9 +21,11 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
     phoneNumber: "",
+    shopName: "",
     email: "",
-    password: "",
-    confirmPassword: "",
+    address: "",
+    passwordHash: "",
+    confirmPassword: "", 
   });
   const [isLoading, setIsLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -49,52 +51,22 @@ const Register = () => {
       [name]: value,
     }));
 
-    // Check password strength if the password field is changed
-    if (name === "password") {
-      checkPasswordStrength(value);
-    }
-
     // Check if passwords match
     if (name === "password" || name === "confirmPassword") {
       if (name === "confirmPassword") {
-        setPasswordsMatch(formData.password === value);
+        setPasswordsMatch(formData.passwordHash === value);
       } else {
         setPasswordsMatch(value === formData.confirmPassword);
       }
     }
   };
 
-  const checkPasswordStrength = (password) => {
-    setPasswordStrength({
-      hasMinLength: password.length >= 8,
-      hasUpperCase: /[A-Z]/.test(password),
-      hasLowerCase: /[a-z]/.test(password),
-      hasNumber: /[0-9]/.test(password),
-      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-    });
-  };
-
-  const isPasswordStrong = () => {
-    return (
-      passwordStrength.hasMinLength &&
-      passwordStrength.hasUpperCase &&
-      passwordStrength.hasLowerCase &&
-      passwordStrength.hasNumber &&
-      passwordStrength.hasSpecialChar
-    );
-  };
-
   const handleRegister = async (e) => {
     e.preventDefault();
 
     // Validation checks
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.passwordHash !== formData.confirmPassword) {
       setError("Passwords don't match");
-      return;
-    }
-
-    if (!isPasswordStrong()) {
-      setError("Password doesn't meet the strength requirements");
       return;
     }
 
@@ -107,14 +79,15 @@ const Register = () => {
       const { confirmPassword, ...registrationData } = formData;
 
       const response = await axios.post(
-        `${process.env.REACT_APP_API}/auth/register`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/register`,
         registrationData
       );
+      console.log(formData);
 
       if (response.data) {
         setSuccess("Registration successful! You can now login.");
         setTimeout(() => {
-          navigate("/login");
+          navigate("/shopowner/dashboard");
         }, 2000);
       }
     } catch (error) {
@@ -289,6 +262,24 @@ const Register = () => {
                     className="w-full"
                   />
                 </div>
+                <div className="space-y-2">
+                  <label
+                    htmlFor="address"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Shop Address
+                  </label>
+                  <Input
+                    id="address"
+                    type="text"
+                    name="address"
+                    placeholder="Enter your Shop Address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full"
+                  />
+                </div>
 
                 {/* Password field */}
                 <div className="space-y-2">
@@ -300,11 +291,11 @@ const Register = () => {
                   </label>
                   <div className="relative">
                     <Input
-                      id="password"
+                      id="passwordHash"
                       type={passwordVisible ? "text" : "password"}
-                      name="password"
+                      name="passwordHash"
                       placeholder="Create a password"
-                      value={formData.password}
+                      value={formData.passwordHash}
                       onChange={handleInputChange}
                       required
                       className="w-full pr-10"

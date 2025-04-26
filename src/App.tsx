@@ -12,6 +12,7 @@ import ViewPrints from "./Dashboard/ViewPrints";
 import Home from "./Landing/Home";
 import ViewPricing from "./Dashboard/ViewPricing";
 import AllUser from "./Admin/AllUser";
+import PageNotFound from "./PageNotFound";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth/signin" element={<Signup />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/auth/register" element={<Register />} />
           <Route path="/preferences/:id" element={<Preferences />} />
 
           <Route element={<AdminRoute />}>
@@ -35,6 +36,8 @@ function App() {
             <Route path="/shopowner/view-prints" element={<ViewPrints />} />
             <Route path="/shopowner/setting" element={<Setting />} />
           </Route>
+
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>
     </AuthProvider>
