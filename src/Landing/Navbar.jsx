@@ -224,7 +224,9 @@ const Navbar = () => {
                       href="/auth/signin"
                       onClick={(e) => handleNavigation("/auth/signin", e)}
                     >
-                      <Button className="w-full rounded-full">Sign Up</Button>
+                      <Button className="w-full rounded-full">
+                        <Link to="/auth/signin">Get Started</Link>
+                      </Button>
                     </a>
                   </div>
 

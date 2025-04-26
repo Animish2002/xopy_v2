@@ -220,7 +220,7 @@ const HeroSection = () => {
                   size="lg"
                   className="w-full sm:w-auto gap-2 px-8 rounded-full font-medium"
                 >
-                  Get Started
+                  <Link to="/auth/signin">Get Started</Link>
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </motion.div>
