@@ -36,6 +36,8 @@ export function AppHeader({
       // Clear local storage
       localStorage.removeItem("authToken");
       localStorage.removeItem("role");
+      localStorage.removeItem("sessionId");
+      localStorage.removeItem("userName");
       // Clear session storage
       sessionStorage.clear();
 
