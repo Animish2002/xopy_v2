@@ -1,7 +1,7 @@
 import { Bell, ChevronDown, Menu, User } from "lucide-react";
 import { useState } from "react";
 import { useSidebar } from "./sidebar";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface AppHeaderProps {
@@ -24,14 +24,14 @@ export function AppHeader({
     setIsLoading(true);
     try {
       // Replace with your actual logout API endpoint
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/logout`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Assuming you store the token in localStorage
-          },
-        }
-      );
+      // const response = await axios.post(
+      //   `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/logout`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Assuming you store the token in localStorage
+      //     },
+      //   }
+      // );
 
       // Clear local storage
       localStorage.removeItem("authToken");
