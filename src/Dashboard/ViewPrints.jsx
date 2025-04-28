@@ -431,7 +431,7 @@ const PrintFilesViewer = () => {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="w-full"
+                                className="w-auto"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleStatusUpdate(job.id);
