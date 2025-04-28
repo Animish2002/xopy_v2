@@ -2,7 +2,7 @@ import { Bell, ChevronDown, Menu, User } from "lucide-react";
 import { useState } from "react";
 import { useSidebar } from "./sidebar";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 
 interface AppHeaderProps {
   userName?: string;
