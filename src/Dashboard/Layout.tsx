@@ -8,12 +8,15 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const name = localStorage.getItem("userName");
+  const role = localStorage.getItem("role");
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen">
         <AppSidebar />
         <div className="flex flex-col flex-1">
-          <AppHeader userName="Alex Smith" userRole="Customer Admin" />
+        <AppHeader userName={name ?? ""} userRole={role?.toString() ?? undefined} />
           <main className="flex-1 md:p-4 p-1.5 overflow-auto">{children}</main>
         </div>
       </div>
