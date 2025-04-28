@@ -57,12 +57,14 @@ const items = [
   },
 ];
 
+const name = localStorage.getItem("userName");
+
 export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="p-4 border-b">
         <div className="flex items-center gap-2">
-          <span className=" text-lg">Customer portal</span>
+          <span className=" text-lg">Welcome back, {name}</span>
         </div>
       </SidebarHeader>
 
