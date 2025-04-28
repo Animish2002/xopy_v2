@@ -1,6 +1,8 @@
 import { Bell, ChevronDown, Menu, User } from "lucide-react";
 import { useState } from "react";
 import { useSidebar } from "./sidebar";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 interface AppHeaderProps {
   userName?: string;
@@ -15,6 +17,40 @@ export function AppHeader({
 }: AppHeaderProps) {
   const { toggleSidebar } = useSidebar();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    setIsLoading(true);
+    try {
+      // Replace with your actual logout API endpoint
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/logout`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Assuming you store the token in localStorage
+          },
+        }
+      );
+
+      // Clear local storage
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("role");
+      // Clear session storage
+      sessionStorage.clear();
+
+      // Redirect to login page
+      navigate("/auth/signin");
+    } catch (error) {
+      console.error("Logout failed:", error);
+
+      // Even if API call fails, clear session and redirect
+      localStorage.clear();
+      navigate("/auth/signin");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <header className="h-15 border-b flex items-center justify-between px-4 bg-white">
@@ -78,12 +114,14 @@ export function AppHeader({
                   Account Settings
                 </a>
                 <hr className="my-1" />
-                <a
-                  href="#logout"
+                <button
+                  role="menuitem"
                   className="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100 rounded-md"
+                  onClick={handleLogout}
+                  disabled={isLoading}
                 >
-                  Logout
-                </a>
+                  {isLoading ? "Logging out..." : "Log Out"}
+                </button>
               </div>
             </div>
           )}
