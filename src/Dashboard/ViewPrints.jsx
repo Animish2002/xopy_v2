@@ -138,7 +138,7 @@ const PrintFilesViewer = () => {
     try {
       setUpdatingStatus(true);
       const response = await axios.patch(
-        `${process.env.REACT_APP_API}/auth/print-jobs/${jobId}/status`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/print-jobs/${jobId}/status`,
         { status: "COMPLETED" }
       );
 
