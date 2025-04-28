@@ -14,7 +14,7 @@ export default function Layout({ children }: LayoutProps) {
         <AppSidebar />
         <div className="flex flex-col flex-1">
           <AppHeader userName="Alex Smith" userRole="Customer Admin" />
-          <main className="flex-1 p-4 overflow-auto">{children}</main>
+          <main className="flex-1 md:p-4 p-1.5 overflow-auto">{children}</main>
         </div>
       </div>
     </SidebarProvider>

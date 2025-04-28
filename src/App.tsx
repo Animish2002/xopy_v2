@@ -8,11 +8,11 @@ import Preferences from "./EndUser/Preferences";
 import DownloadQR from "./Dashboard/DownloadQR";
 import Setting from "./Dashboard/Setting";
 import AddPricing from "./Dashboard/Add-Pricing";
-import ViewPrints from "./Dashboard/ViewPrints";
 import Home from "./Landing/Home";
 import ViewPricing from "./Dashboard/ViewPricing";
 import AllUser from "./Admin/AllUser";
 import PageNotFound from "./PageNotFound";
+import PrintFilesViewer from "./Dashboard/ViewPrints";
 
 function App() {
   return (
@@ -33,7 +33,10 @@ function App() {
             <Route path="/shopowner/downloadQR" element={<DownloadQR />} />
             <Route path="/shopowner/add-pricing" element={<AddPricing />} />
             <Route path="/shopowner/view-pricing" element={<ViewPricing />} />
-            <Route path="/shopowner/view-prints" element={<ViewPrints />} />
+            <Route
+              path="/shopowner/view-prints"
+              element={<PrintFilesViewer />}
+            />
             <Route path="/shopowner/setting" element={<Setting />} />
           </Route>
 
