@@ -128,20 +128,20 @@ const Register = () => {
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900 p-4">
+    <div className="min-h-screen flex items-center justify-center text-gray-900 md:p-4 md:w-full w-[25rem] mx-auto">
       {/* Logo */}
-      <div className="absolute top-6 left-6">
-        <img src={logo} alt="Xopy Logo" className="h-24 w-auto" />
+      <div className="absolute md:top-4 md:left-6 top-2 left-3">
+        <img src={logo} alt="Xopy Logo" className="md:h-24 h-20 w-auto" />
       </div>
 
-      <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center bg-white rounded-lg shadow-lg p-8">
+      <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center bg-white rounded-lg shadow-2xl md:p-8 p-4 md:mt-0 mt-16">
         {/* Left Column - Info */}
-        <div className="space-y-6 p-4">
+        <div className="space-y-6 md:p-4 p-2">
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold tracking-tight md:text-4xl ui">
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl ui">
               Join us today
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="md:text-lg text-sm text-gray-600">
               Create your account to start your journey with us. Get access to
               all our features and services.
             </p>
@@ -153,7 +153,7 @@ const Register = () => {
               className="rounded-lg object-cover"
             />
           </div>
-          <div className="text-sm">
+          <div className="text-xs md:text-sm">
             <span className="text-gray-600">Already have an account? </span>
             <Link
               to="/auth/signin"

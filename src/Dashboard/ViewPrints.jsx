@@ -138,7 +138,9 @@ const PrintFilesViewer = () => {
     try {
       setUpdatingStatus(true);
       const response = await axios.patch(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/print-jobs/${jobId}/status`,
+        `${
+          import.meta.env.VITE_BACKEND_BASE_URL
+        }/auth/print-jobs/${jobId}/status`,
         { status: "COMPLETED" }
       );
 
@@ -228,9 +230,9 @@ const PrintFilesViewer = () => {
         <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
           <div className="max-w-screen-2xl mx-auto px-4 pb-2">
             <div className="flex items-center justify-between">
-            <div className="p-4 md:text-2xl text-lg ui font-semibold">
-            View Prints
-            </div>
+              <div className="p-4 md:text-2xl text-lg ui font-semibold">
+                View Prints
+              </div>
               <div className="flex items-center space-x-4">
                 <Sheet
                   open={isMobileMenuOpen}
@@ -530,7 +532,46 @@ const PrintFilesViewer = () => {
                         </div>
                       </div>
                     </div>
-
+                    {/* Print Details */}
+                    <div className="p-6 border-t border-gray-100">
+                      <h3 className="font-semibold text-gray-900 mb-4">
+                        Print Specifications
+                      </h3>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div>
+                          <p className="text-sm text-gray-500">Copies</p>
+                          <p className="font-medium">
+                            {selectedJob.noofCopies}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500">Print Type</p>
+                          <p className="font-medium">{selectedJob.printType}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500">Paper Type</p>
+                          <p className="font-medium">{selectedJob.paperType}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500">Print Side</p>
+                          <p className="font-medium">
+                            {selectedJob.printSide?.replace("_", " ")}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500">Total Pages</p>
+                          <p className="font-medium">
+                            {selectedJob.totalPages || "All Pages"}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500">Total Cost</p>
+                          <p className="font-medium">
+                            ₹{Number(selectedJob.totalCost || 0).toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                     {/* File Preview with Tabs for multiple files */}
                     <div className="relative">
                       {showWatermark && <Watermark />}
@@ -571,47 +612,6 @@ const PrintFilesViewer = () => {
                           </TabsContent>
                         ))}
                       </Tabs>
-                    </div>
-
-                    {/* Print Details */}
-                    <div className="p-6 border-t border-gray-100">
-                      <h3 className="font-semibold text-gray-900 mb-4">
-                        Print Specifications
-                      </h3>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <div>
-                          <p className="text-sm text-gray-500">Copies</p>
-                          <p className="font-medium">
-                            {selectedJob.noofCopies}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Print Type</p>
-                          <p className="font-medium">{selectedJob.printType}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Paper Type</p>
-                          <p className="font-medium">{selectedJob.paperType}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Print Side</p>
-                          <p className="font-medium">
-                            {selectedJob.printSide?.replace("_", " ")}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Total Pages</p>
-                          <p className="font-medium">
-                            {selectedJob.totalPages || "All Pages"}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Total Cost</p>
-                          <p className="font-medium">
-                            ₹{Number(selectedJob.totalCost || 0).toFixed(2)}
-                          </p>
-                        </div>
-                      </div>
                     </div>
                   </CardContent>
                   <CardFooter className="border-t border-gray-100 justify-between">

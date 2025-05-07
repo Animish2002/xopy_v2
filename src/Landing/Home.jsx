@@ -14,7 +14,7 @@ const Home = () => {
       <HeroSection />
       <Mission />
       <XopyFeatures />
-      <Team />
+      {/* <Team /> */}
       <ContactUs />
       <Footer />
     </div>

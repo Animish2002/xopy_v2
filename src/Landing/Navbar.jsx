@@ -142,7 +142,10 @@ const Navbar = () => {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                <NavigationMenuLink
+                  className={navigationMenuTriggerStyle()}
+                 
+                >
                   <button onClick={(e) => handleNavigation("/features", e)}>
                     Features
                   </button>
