@@ -29,7 +29,7 @@ const DownloadQR = () => {
   const generateQR = async () => {
     setLoading(true);
     try {
-      const id = localStorage.getItem("sessionId");
+      const id = localStorage.getItem("shopOwnerId");
       const url = new URL(
         `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/generate-qr/${id}`
       );

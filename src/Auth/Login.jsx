@@ -55,10 +55,10 @@ const Signup = () => {
         // localStorage.setItem("userName", user.name);
         setSuccess(`Welcome back, ${user.role}!`);
 
-        if (user.role === "ShopOwner") {
+        if (user.role === "SHOP_OWNER") {
           navigate("/shopowner/dashboard");
-        } else if (user.role === "Admin") {
-          navigate("/admin");
+        } else if (user.role === "ADMIN") {
+          navigate("/admin/dashboard");
         } else {
           navigate("/");
         }

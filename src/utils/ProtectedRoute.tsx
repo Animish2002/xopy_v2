@@ -4,7 +4,7 @@ import { useAuth } from "./AuthContext";
 
 // Define the allowed roles for each route
 interface ProtectedRouteProps {
-  allowedRoles?: ("Admin" | "ShopOwner" )[];
+  allowedRoles?: ("ADMIN" | "SHOP_OWNER" )[];
   children?: React.ReactNode;
 }
 
@@ -32,7 +32,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 export const AdminRoute: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => (
-  <ProtectedRoute allowedRoles={["Admin"]}>
+  <ProtectedRoute allowedRoles={["ADMIN"]}>
     {children ? children : <Outlet />}
   </ProtectedRoute>
 );
@@ -40,7 +40,7 @@ export const AdminRoute: React.FC<{ children?: React.ReactNode }> = ({
 export const ShopownerRoute: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => (
-  <ProtectedRoute allowedRoles={["ShopOwner"]}>
+  <ProtectedRoute allowedRoles={["SHOP_OWNER"]}>
     {children ? children : <Outlet />}
   </ProtectedRoute>
 );

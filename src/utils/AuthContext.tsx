@@ -6,7 +6,7 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: "Admin" | "ShopOwner";
+  role: "ADMIN" | "SHOP_OWNER";
 }
 
 // Define the token payload interface to match your actual token
@@ -14,7 +14,8 @@ interface TokenPayload {
   id: string;
   email: string;
   name: string;
-  role: "Admin" | "ShopOwner";
+  role: "ADMIN" | "SHOP_OWNER";
+  shopOwnerId: string;
   iat: number;
   exp: number;
 }
@@ -51,6 +52,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           email: decoded.email,
           role: decoded.role,
           name: decoded.name,
+          shopOwnerId: decoded.shopOwnerId,
         };
       } catch (error) {
         localStorage.clear();
@@ -69,6 +71,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       localStorage.setItem("sessionId", decoded.id.toString());
       localStorage.setItem("userName", decoded.name);
       localStorage.setItem("role", decoded.role);
+      localStorage.setItem("shopOwnerId", decoded.shopOwnerId.toString());
 
       // Set user state
       setUser({
