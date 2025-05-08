@@ -87,7 +87,7 @@ const Register = () => {
       if (response.data) {
         setSuccess("Registration successful! You can now login.");
         setTimeout(() => {
-          navigate("/shopowner/dashboard");
+          navigate("/auth/signin");
         }, 2000);
       }
     } catch (error) {

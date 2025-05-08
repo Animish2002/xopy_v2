@@ -38,6 +38,7 @@ export function AppHeader({
       localStorage.removeItem("role");
       localStorage.removeItem("sessionId");
       localStorage.removeItem("userName");
+      localStorage.removeItem("shopOwnerId");
       // Clear session storage
       sessionStorage.clear();
 
