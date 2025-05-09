@@ -13,6 +13,7 @@ import ViewPricing from "./Dashboard/ViewPricing";
 import AllUser from "./Admin/AllUser";
 import PageNotFound from "./PageNotFound";
 import PrintFilesViewer from "./Dashboard/ViewPrints";
+import EditPricing from "./Dashboard/EditPricing";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/shopowner/downloadQR" element={<DownloadQR />} />
             <Route path="/shopowner/add-pricing" element={<AddPricing />} />
             <Route path="/shopowner/view-pricing" element={<ViewPricing />} />
+            <Route path="/shopowner/edit-pricing/:id" element={<EditPricing />} />
             <Route
               path="/shopowner/view-prints"
               element={<PrintFilesViewer />}

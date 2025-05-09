@@ -7,6 +7,7 @@ interface User {
   name: string;
   email: string;
   role: "ADMIN" | "SHOP_OWNER";
+  shopOwnerId?: string;
 }
 
 // Define the token payload interface to match your actual token
@@ -15,7 +16,7 @@ interface TokenPayload {
   email: string;
   name: string;
   role: "ADMIN" | "SHOP_OWNER";
-  shopOwnerId: string;
+  shopOwnerId?: string;
   iat: number;
   exp: number;
 }
@@ -52,7 +53,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           email: decoded.email,
           role: decoded.role,
           name: decoded.name,
-          shopOwnerId: decoded.shopOwnerId,
+          shopOwnerId:
+            decoded.role === "SHOP_OWNER" ? decoded.shopOwnerId : undefined,
         };
       } catch (error) {
         localStorage.clear();
@@ -71,7 +73,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       localStorage.setItem("sessionId", decoded.id.toString());
       localStorage.setItem("userName", decoded.name);
       localStorage.setItem("role", decoded.role);
-      localStorage.setItem("shopOwnerId", decoded.shopOwnerId.toString());
+      if (decoded.role === "SHOP_OWNER") {
+        localStorage.setItem(
+          "shopOwnerId",
+          (decoded.shopOwnerId ?? "").toString()
+        );
+      }
 
       // Set user state
       setUser({
@@ -79,6 +86,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email: decoded.email,
         role: decoded.role,
         name: decoded.name,
+        shopOwnerId:
+          decoded.role === "SHOP_OWNER" ? decoded.shopOwnerId : undefined,
       });
     } catch (error) {
       console.error("Invalid token", error);

@@ -48,7 +48,7 @@ const AddPricing = () => {
   });
 
   useEffect(() => {
-    const sid = localStorage.getItem("sessionId");
+    const sid = localStorage.getItem("shopOwnerId");
     if (sid) {
       setFormData((prev) => ({ ...prev, shopOwnerId: sid }));
     } else {
