@@ -104,14 +104,9 @@ export function AppHeader({
           {showUserMenu && (
             <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border z-10">
               <div className="md:p-4 p-2">
+                
                 <a
-                  href="#profile"
-                  className="block px-4 py-2 text-sm hover:bg-gray-100 rounded-md"
-                >
-                  Profile
-                </a>
-                <a
-                  href="#account"
+                  href="/shopowner/setting"
                   className="block px-4 py-2 text-sm hover:bg-gray-100 rounded-md"
                 >
                   Account Settings
