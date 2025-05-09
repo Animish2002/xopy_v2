@@ -14,6 +14,7 @@ import AllUser from "./Admin/AllUser";
 import PageNotFound from "./PageNotFound";
 import PrintFilesViewer from "./Dashboard/ViewPrints";
 import EditPricing from "./Dashboard/EditPricing";
+import Dashboard from "./Admin/Dashboard";
 
 function App() {
   return (
@@ -26,7 +27,8 @@ function App() {
           <Route path="/preferences/:id" element={<Preferences />} />
 
           <Route element={<AdminRoute />}>
-            <Route path="/admin/dashboard" element={<AllUser />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/users" element={<AllUser />} />
           </Route>
 
           <Route element={<ShopownerRoute />}>
