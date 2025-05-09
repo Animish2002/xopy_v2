@@ -20,12 +20,15 @@ const AllUser = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await fetch("http://localhost:8517/api/admin/users", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_BASE_URL}/admin/users`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch users");

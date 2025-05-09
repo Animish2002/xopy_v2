@@ -1,41 +1,186 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
 import { User, Phone, Mail, AtSign, FileText, Camera } from "lucide-react";
 
 const Settings = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    fullName: 'Devid Jhon',
-    phoneNumber: '+990 3343 7865',
-    emailAddress: 'devidjond45@gmail.com',
-    username: 'devidjhon24',
-    bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque posuere fermentum urna, eu condimentum mauris tempus ut. Donec fermentum blandit aliquet.',
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
+    name: "",
+    phoneNumber: "",
+    email: "",
+    address: "",
+    newPassword: "",
+    confirmPassword: "",
   });
+
+  // Get user ID from localStorage
+  const getUserId = () => {
+    return localStorage.getItem("sessionId"); // Adjust this if your ID key is different
+  };
+
+  // Fetch user data when component mounts
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setLoading(true);
+        setError("");
+        const userId = getUserId();
+
+        if (!userId) {
+          setError("User ID not found in localStorage");
+          setLoading(false);
+          return;
+        }
+
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/user/${userId}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+
+        const userData = await response.json();
+
+        // Update form data with fetched user details from the response structure
+        setFormData({
+          name: userData.user.name || "",
+          phoneNumber: userData.user.phoneNumber || "",
+          email: userData.user.email || "",
+          address: userData.user.address || "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        setError("Failed to load user data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     if (e) e.preventDefault();
-    
-    if (formData.newPassword && formData.newPassword !== formData.confirmPassword) {
-      setMessage('Passwords do not match');
-      return;
+
+    try {
+      setLoading(true);
+      setMessage("");
+      const userId = getUserId();
+
+      if (!userId) {
+        setError("User ID not found in localStorage");
+        setLoading(false);
+        return;
+      }
+
+      // Password validation
+      if (
+        formData.newPassword &&
+        formData.newPassword !== formData.confirmPassword
+      ) {
+        setMessage("Passwords do not match");
+        setLoading(false);
+        return;
+      }
+
+      // Prepare data for API based on backend expectations
+      const dataToUpdate = {
+        name: formData.name,
+        phoneNumber: formData.phoneNumber,
+        address: formData.address,
+      };
+
+      // Include password only if user is updating password
+      if (formData.newPassword) {
+        dataToUpdate.password = formData.newPassword;
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/update-user/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToUpdate),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update profile");
+      }
+
+      const result = await response.json();
+
+      // Clear password fields after successful update
+      setFormData({
+        ...formData,
+        newPassword: "",
+        confirmPassword: "",
+      });
+
+      setMessage("Profile updated successfully!");
+      setIsEditing(false);
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      setMessage(err.message || "Failed to update profile. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    
-    setMessage('Profile updated successfully!');
-    setIsEditing(false);
   };
 
   const handleCancel = () => {
     setIsEditing(false);
-    setMessage('');
+    setMessage("");
+    // Reset password fields
+    setFormData({
+      ...formData,
+      newPassword: "",
+      confirmPassword: "",
+    });
   };
+
+  if (loading && !formData.name) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-zinc-800 mx-auto"></div>
+            <p className="mt-4">Loading user data...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error && !formData.name) {
+    return (
+      <Layout>
+        <div className="p-4">
+          <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg">
+            {error}
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700"
+          >
+            Retry
+          </button>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -43,15 +188,15 @@ const Settings = () => {
         <div className="p-4 md:text-2xl text-lg font-semibold">
           General Settings
         </div>
-        
+
         {/* Message Alert */}
         {message && (
           <div className="mx-auto md:w-10/12 w-full mb-6">
-            <div 
+            <div
               className={`p-4 rounded-lg ${
-                message.includes('not match') 
-                  ? 'bg-red-50 text-red-700 border border-red-200' 
-                  : 'bg-green-50 text-green-700 border border-green-200'
+                message.includes("not match") || message.includes("Failed")
+                  ? "bg-red-50 text-red-700 border border-red-200"
+                  : "bg-green-50 text-green-700 border border-green-200"
               }`}
             >
               {message}
@@ -67,19 +212,26 @@ const Settings = () => {
                   Personal Information
                 </h3>
                 <button
-                  onClick={() => setIsEditing(!isEditing)}
-                  className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 shadow-sm"
+                  onClick={() => {
+                    if (isEditing) {
+                      handleCancel();
+                    } else {
+                      setIsEditing(true);
+                    }
+                  }}
+                  className="px-4 py-1.5 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors duration-200 shadow-sm"
+                  disabled={loading}
                 >
-                  {isEditing ? 'Cancel Edit' : 'Edit Profile'}
+                  {isEditing ? "Cancel Edit" : "Edit Profile"}
                 </button>
               </div>
               <div className="p-7">
-                <div>
+                <form onSubmit={handleSubmit}>
                   <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/2">
                       <label
                         className="mb-3 block text-sm font-medium text-black dark:text-white"
-                        htmlFor="fullName"
+                        htmlFor="name"
                       >
                         Full Name
                       </label>
@@ -88,14 +240,17 @@ const Settings = () => {
                           <User className="h-5 w-5 text-body" />
                         </span>
                         <input
-                          className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                          className={`w-full rounded border border-stroke py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:text-white dark:focus:border-primary ${
+                            !isEditing ? "bg-gray-100" : "bg-gray"
+                          }`}
                           type="text"
-                          name="fullName"
-                          id="fullName"
-                          placeholder="Devid Jhon"
-                          value={formData.fullName}
+                          name="name"
+                          id="name"
+                          placeholder="Enter your full name"
+                          value={formData.name}
                           onChange={handleChange}
                           readOnly={!isEditing}
+                          required
                         />
                       </div>
                     </div>
@@ -112,11 +267,13 @@ const Settings = () => {
                           <Phone className="h-5 w-5 text-body" />
                         </span>
                         <input
-                          className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                          className={`w-full rounded border border-stroke py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:text-white dark:focus:border-primary ${
+                            !isEditing ? "bg-gray-100" : "bg-gray"
+                          }`}
                           type="text"
                           name="phoneNumber"
                           id="phoneNumber"
-                          placeholder="+990 3343 7865"
+                          placeholder="Enter your phone number"
                           value={formData.phoneNumber}
                           onChange={handleChange}
                           readOnly={!isEditing}
@@ -128,7 +285,7 @@ const Settings = () => {
                   <div className="mb-5.5">
                     <label
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
-                      htmlFor="emailAddress"
+                      htmlFor="email"
                     >
                       Email Address
                     </label>
@@ -137,14 +294,13 @@ const Settings = () => {
                         <Mail className="h-5 w-5 text-body" />
                       </span>
                       <input
-                        className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                        className="w-full rounded border border-stroke bg-gray-100 py-3 pl-11.5 pr-4.5 text-black focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white"
                         type="email"
-                        name="emailAddress"
-                        id="emailAddress"
-                        placeholder="devidjond45@gmail.com"
-                        value={formData.emailAddress}
-                        onChange={handleChange}
-                        readOnly={!isEditing}
+                        name="email"
+                        id="email"
+                        placeholder="Enter your email address"
+                        value={formData.email}
+                        readOnly={true} // Email should not be editable
                       />
                     </div>
                   </div>
@@ -152,46 +308,34 @@ const Settings = () => {
                   <div className="mb-5.5">
                     <label
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
-                      htmlFor="username"
+                      htmlFor="address"
                     >
-                      Username
+                      Address
                     </label>
                     <div className="relative">
                       <span className="absolute left-4.5 top-4">
                         <AtSign className="h-5 w-5 text-body" />
                       </span>
-                      <input
-                        className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                        type="text"
-                        name="username"
-                        id="username"
-                        placeholder="devidjhon24"
-                        value={formData.username}
+                      <textarea
+                        className={`w-full rounded border border-stroke py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:text-white dark:focus:border-primary ${
+                          !isEditing ? "bg-gray-100" : "bg-gray"
+                        }`}
+                        name="address"
+                        id="address"
+                        rows="3"
+                        placeholder="Enter your address"
+                        value={formData.address}
                         onChange={handleChange}
                         readOnly={!isEditing}
-                      />
+                      ></textarea>
                     </div>
                   </div>
 
                   {isEditing && (
                     <div className="pt-6 border-t border-gray-100 mb-5.5">
-                      <h3 className="text-lg font-semibold text-black dark:text-white mb-4">Change Password</h3>
-                      <div className="mb-5.5">
-                        <label
-                          className="mb-3 block text-sm font-medium text-black dark:text-white"
-                          htmlFor="currentPassword"
-                        >
-                          Current Password
-                        </label>
-                        <input
-                          className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                          type="password"
-                          name="currentPassword"
-                          id="currentPassword"
-                          value={formData.currentPassword}
-                          onChange={handleChange}
-                        />
-                      </div>
+                      <h3 className="text-lg font-semibold text-black dark:text-white mb-4">
+                        Change Password
+                      </h3>
                       <div className="mb-5.5">
                         <label
                           className="mb-3 block text-sm font-medium text-black dark:text-white"
@@ -206,6 +350,7 @@ const Settings = () => {
                           id="newPassword"
                           value={formData.newPassword}
                           onChange={handleChange}
+                          placeholder="Leave blank to keep current password"
                         />
                       </div>
                       <div className="mb-5.5">
@@ -222,6 +367,7 @@ const Settings = () => {
                           id="confirmPassword"
                           value={formData.confirmPassword}
                           onChange={handleChange}
+                          placeholder="Confirm new password"
                         />
                       </div>
                     </div>
@@ -233,19 +379,20 @@ const Settings = () => {
                         className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                         type="button"
                         onClick={handleCancel}
+                        disabled={loading}
                       >
                         Cancel
                       </button>
                       <button
-                        className="flex justify-center rounded bg-blue-500 py-2 px-6 font-medium text-white hover:bg-blue-600"
-                        type="button"
-                        onClick={handleSubmit}
+                        className="flex justify-center bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 py-2 px-6 font-medium disabled:bg-zinc-400"
+                        type="submit"
+                        disabled={loading}
                       >
-                        Save Changes
+                        {loading ? "Saving..." : "Save Changes"}
                       </button>
                     </div>
                   )}
-                </div>
+                </form>
               </div>
             </div>
           </div>
