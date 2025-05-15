@@ -26,7 +26,7 @@ const ViewPricing = () => {
       const id = localStorage.getItem("shopOwnerId");
       if (!id) throw new Error("No ID found");
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/pricing-config/${id}`
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/photocopycenter/pricing-config/${id}`
       );
       if (!response.ok)
         throw new Error("Failed to fetch pricing configuration");
@@ -51,7 +51,7 @@ const ViewPricing = () => {
     setDeleteLoading(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/delete-pricing-config/${configId}`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/photocopycenter/delete-pricing-config/${configId}`,
         {
           method: "DELETE",
         }

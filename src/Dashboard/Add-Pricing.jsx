@@ -95,7 +95,7 @@ const AddPricing = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/pricing-config`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/photocopycenter/pricing-config`,
         {
           method: "POST",
           headers: {

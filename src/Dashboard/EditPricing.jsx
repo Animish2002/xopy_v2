@@ -164,7 +164,9 @@ const EditPricing = () => {
     try {
       // Replace with your actual API endpoint
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/pricing-configById/${id}`
+        `${
+          import.meta.env.VITE_BACKEND_BASE_URL
+        }/photocopycenter/pricing-configById/${id}`
       );
 
       if (!response.ok) {
@@ -262,13 +264,15 @@ const EditPricing = () => {
 
     try {
       // Determine URL and method based on whether we're editing or creating
-      let url = `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/pricing-config`;
+      let url = `${
+        import.meta.env.VITE_BACKEND_BASE_URL
+      }/photocopycenter/pricing-config`;
       let method = "POST";
 
       if (isEditMode) {
         url = `${
           import.meta.env.VITE_BACKEND_BASE_URL
-        }/auth/edit-pricing-config/${formData.id}`;
+        }/photocopycenter/edit-pricing-config/${formData.id}`;
         method = "PUT";
       }
 
