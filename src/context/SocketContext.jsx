@@ -22,23 +22,21 @@ export const SocketProvider = ({ children }) => {
     // Only create socket if we have a valid backend URL
     const SOCKET_URL = "http://localhost:8517";
 
-    if (!SOCKET_URL) {
-      console.error("Backend URL not found in environment variables");
-      return;
-    }
+    if (!SOCKET_URL || !user || user.role !== "SHOP_OWNER") return; // Don't connect if no user or URL or user is not shopowner
 
-    console.log(`Attempting to connect to socket at: ${SOCKET_URL}`);
+    console.log(`Attempting to connect to socket as user: ${user.id}`);
 
     // Create socket connection when component mounts
     const socketInstance = io(SOCKET_URL, {
       transports: ["websocket"],
+      auth: {
+        token: localStorage.getItem("token"),
+        userId: user.id,
+      },
       autoConnect: true,
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 2000,
-      auth: {
-        token: localStorage.getItem("token"), // Send auth token if you need authentication
-      },
     });
 
     // Add after socketInstance creation
