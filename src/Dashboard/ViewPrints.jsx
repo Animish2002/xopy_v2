@@ -281,7 +281,6 @@ const PrintFilesViewer = () => {
   }
 
   return (
-    
     <Layout>
       <div className="min-h-screen bg-gray-50">
         {/* Top Navigation Bar */}
@@ -291,7 +290,7 @@ const PrintFilesViewer = () => {
               <div className="p-4 md:text-2xl text-lg ui font-semibold">
                 View Prints
               </div>
-               <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <div
                   className={`w-3 h-3 rounded-full ${
                     connected ? "bg-green-500" : "bg-red-500"
@@ -340,9 +339,9 @@ const PrintFilesViewer = () => {
                             <div className="flex items-center justify-between mb-1">
                               <span className="font-medium">
                                 <span className="font-medium">
-                                  {JSON.parse(
-                                    job.metadata
-                                  )?.customerName?.trim() || "Unnamed Customer"}
+                                  {(job.metadata
+                                    ? JSON.parse(job.metadata)?.customerName
+                                    : job.customerName) || "Unnamed Customer"}
                                 </span>
                               </span>
 
@@ -363,7 +362,7 @@ const PrintFilesViewer = () => {
                   </SheetContent>
                 </Sheet>
               </div>
-             
+
               <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 flex-1 max-w-xl mx-4">
                 <Search className="h-4 w-4 text-gray-500 mr-2" />
                 <Input
@@ -486,9 +485,9 @@ const PrintFilesViewer = () => {
                                 }`}
                               >
                                 <span className="font-medium">
-                                  {JSON.parse(
-                                    job.metadata
-                                  )?.customerName?.trim() || "Unnamed Customer"}
+                                  {(job.metadata
+                                    ? JSON.parse(job.metadata)?.customerName
+                                    : job.customerName) || "Unnamed Customer"}
                                 </span>
                               </span>
                               <Badge
