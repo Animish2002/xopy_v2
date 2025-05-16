@@ -327,8 +327,14 @@ const PrintFilesViewer = () => {
                           >
                             <div className="flex items-center justify-between mb-1">
                               <span className="font-medium">
-                                {job.customerName}
+                                {console.log("metadata:", job.metadata)}
+                                <span className="font-medium">
+                                  {JSON.parse(
+                                    job.metadata
+                                  )?.customerName?.trim() || "Unnamed Customer"}
+                                </span>
                               </span>
+
                               <Badge
                                 variant="outline"
                                 className={getStatusColor(job.status)}
@@ -479,7 +485,11 @@ const PrintFilesViewer = () => {
                                     : "text-gray-900"
                                 }`}
                               >
-                                {job.customerName || "Unnamed Customer"}
+                                <span className="font-medium">
+                                  {JSON.parse(
+                                    job.metadata
+                                  )?.customerName?.trim() || "Unnamed Customer"}
+                                </span>
                               </span>
                               <Badge
                                 variant="outline"
