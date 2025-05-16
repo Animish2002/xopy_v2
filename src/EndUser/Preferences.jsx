@@ -104,8 +104,8 @@ const Preferences = () => {
       }
       console.log(formData);
       const data = await response.json();
-      setToken(formData.printJob.tokenNumber);
-      setAmount(formData.printJob.totalCost);
+      setToken(data.printJob.tokenNumber);
+      setAmount(data.printJob.totalCost);
       // Add after successful submission (right before confetti)
       if (socket && connected) {
         socket.emit("customerSubmission", {
