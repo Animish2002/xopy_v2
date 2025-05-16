@@ -1,3 +1,4 @@
+// ViewPrints.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -22,6 +23,7 @@ import {
   ArrowRight,
   Trash,
 } from "lucide-react";
+import { useSocket } from "../context/SocketContext";
 
 // Import shadcn components
 import { Button } from "../components/ui/button";
@@ -72,19 +74,67 @@ const PrintFilesViewer = () => {
   const [selectedTab, setSelectedTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [socket, connected] = useSocket();
 
   useEffect(() => {
     fetchFiles();
   }, []);
+  // WebSocket event listeners
+  const handleNewPrintJob = (job) => {
+    setPrintJobs((prev) => [job, ...prev]);
+    setNotification({
+      type: "success",
+      message: `New job received: ${job.tokenNumber}`,
+    });
+  };
+
+  // Replace your current socket useEffect with this:
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewJob = (job) => {
+      console.log("Received new job:", job); // Debug log
+      setPrintJobs((prev) => {
+        // Filter out if already exists (prevent duplicates)
+        const exists = prev.some((j) => j.id === job.id);
+        return exists ? prev : [job, ...prev];
+      });
+    };
+
+    const handleStatusUpdate = (update) => {
+      setPrintJobs((prev) =>
+        prev.map((job) =>
+          job.id === update.id ? { ...job, status: update.status } : job
+        )
+      );
+    };
+
+    // Join shop room on connection
+    const shopId = localStorage.getItem("shopOwnerId");
+    if (shopId) {
+      console.log("Joining shop room:", shopId);
+      socket.emit("joinShopRoom", shopId);
+    }
+
+    socket.on("newPrintJob", handleNewJob);
+    socket.on("printJobStatusUpdate", handleStatusUpdate);
+
+    return () => {
+      socket.off("newPrintJob", handleNewJob);
+      socket.off("printJobStatusUpdate", handleStatusUpdate);
+    };
+  }, [socket]); // Only depend on socket
 
   const fetchFiles = async () => {
     try {
       setLoading(true);
-      const shopId = localStorage.getItem("sessionId");
+      const shopId = localStorage.getItem("shopOwnerId");
       if (!shopId) throw new Error("Shop ID not found");
 
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/shop-files/${shopId}`,
+        `${
+          import.meta.env.VITE_BACKEND_BASE_URL
+        }/printshop/shop-files/${shopId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -140,9 +190,16 @@ const PrintFilesViewer = () => {
       const response = await axios.patch(
         `${
           import.meta.env.VITE_BACKEND_BASE_URL
-        }/auth/print-jobs/${jobId}/status`,
+        }/printshop/print-jobs/${jobId}/status`,
         { status: "COMPLETED" }
       );
+
+      if (socket && connected) {
+        socket.emit("updatePrintJobStatus", {
+          jobId,
+          status: "COMPLETED",
+        });
+      }
 
       if (response.data.success) {
         // Update the job status locally
@@ -299,6 +356,17 @@ const PrintFilesViewer = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
+              </div>
+              <div className="flex items-center gap-2">
+                <div
+                  className={`w-3 h-3 rounded-full ${
+                    connected ? "bg-green-500" : "bg-red-500"
+                  }`}
+                  title={connected ? "Connected" : "Disconnected"}
+                />
+                <span className="text-xs text-gray-500">
+                  {connected ? "Live" : "Offline"}
+                </span>
               </div>
 
               <div className="flex items-center space-x-2">

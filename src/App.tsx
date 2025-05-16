@@ -15,38 +15,44 @@ import PageNotFound from "./PageNotFound";
 import PrintFilesViewer from "./Dashboard/ViewPrints";
 import EditPricing from "./Dashboard/EditPricing";
 import Dashboard from "./Admin/Dashboard";
+import { SocketProvider } from "./context/SocketContext";
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/auth/signin" element={<Signup />} />
-          <Route path="/auth/register" element={<Register />} />
-          <Route path="/preferences/:id" element={<Preferences />} />
+      <SocketProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth/signin" element={<Signup />} />
+            <Route path="/auth/register" element={<Register />} />
+            <Route path="/preferences/:id" element={<Preferences />} />
 
-          <Route element={<AdminRoute />}>
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-            <Route path="/admin/users" element={<AllUser />} />
-          </Route>
+            <Route element={<AdminRoute />}>
+              <Route path="/admin/dashboard" element={<Dashboard />} />
+              <Route path="/admin/users" element={<AllUser />} />
+            </Route>
 
-          <Route element={<ShopownerRoute />}>
-            <Route path="/shopowner/dashboard" element={<DashboardHome />} />
-            <Route path="/shopowner/downloadQR" element={<DownloadQR />} />
-            <Route path="/shopowner/add-pricing" element={<AddPricing />} />
-            <Route path="/shopowner/view-pricing" element={<ViewPricing />} />
-            <Route path="/shopowner/edit-pricing/:id" element={<EditPricing />} />
-            <Route
-              path="/shopowner/view-prints"
-              element={<PrintFilesViewer />}
-            />
-            <Route path="/shopowner/setting" element={<Setting />} />
-          </Route>
+            <Route element={<ShopownerRoute />}>
+              <Route path="/shopowner/dashboard" element={<DashboardHome />} />
+              <Route path="/shopowner/downloadQR" element={<DownloadQR />} />
+              <Route path="/shopowner/add-pricing" element={<AddPricing />} />
+              <Route path="/shopowner/view-pricing" element={<ViewPricing />} />
+              <Route
+                path="/shopowner/edit-pricing/:id"
+                element={<EditPricing />}
+              />
+              <Route
+                path="/shopowner/view-prints"
+                element={<PrintFilesViewer />}
+              />
+              <Route path="/shopowner/setting" element={<Setting />} />
+            </Route>
 
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Router>
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Router>
+      </SocketProvider>
     </AuthProvider>
   );
 }

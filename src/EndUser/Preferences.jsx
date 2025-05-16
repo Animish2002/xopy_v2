@@ -1,3 +1,4 @@
+// Preferences.jsx
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams } from "react-router-dom";
@@ -37,6 +38,7 @@ const Preferences = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [token, setToken] = useState(null);
+  const [amount, setAmount] = useState(0);
 
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
@@ -71,9 +73,17 @@ const Preferences = () => {
 
     // Append customer and print details
     formData.append("shopOwnerId", id);
-    formData.append("customerName", customerDetails.customerName);
-    formData.append("customerPhone", customerDetails.customerPhone);
-    formData.append("customerEmail", customerDetails.customerEmail);
+    // Only append customer details if they're provided
+    if (customerDetails.customerName) {
+      formData.append("customerName", customerDetails.customerName);
+    }
+    if (customerDetails.customerPhone) {
+      formData.append("customerPhone", customerDetails.customerPhone);
+    }
+    if (customerDetails.customerEmail) {
+      formData.append("customerEmail", customerDetails.customerEmail);
+    }
+
     formData.append("noofCopies", preferences.noofCopies);
     formData.append("printType", preferences.printType);
     formData.append("paperType", preferences.paperType);
@@ -82,7 +92,7 @@ const Preferences = () => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API}/auth/print-jobs`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/printshop/print-jobs`,
         {
           method: "POST",
           body: formData,
@@ -94,14 +104,21 @@ const Preferences = () => {
       }
       console.log(formData);
       const data = await response.json();
-      setToken(data.token || Math.floor(Math.random() * 1000000));
+      setToken(formData.printJob.tokenNumber);
+      setAmount(formData.printJob.totalCost);
+      // Add after successful submission (right before confetti)
+      if (socket && connected) {
+        socket.emit("customerSubmission", {
+          shopOwnerId: id,
+          customerName: customerDetails.customerName || "Anonymous Customer",
+          tokenNumber: data.tokenNumber, // From API response
+        });
+      }
       confetti({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
       });
-    } catch (error) {
-      alert("Failed to submit print job. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -119,10 +136,15 @@ const Preferences = () => {
       className="space-y-4"
     >
       <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
+        <div className="mb-4 text-sm text-gray-600 bg-blue-50 p-3 rounded-md">
+          <p>
+            All fields are optional. You can leave them blank if you prefer.
+          </p>
+        </div>
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700 flex items-center">
             <User className="w-4 h-4 mr-2" />
-            Customer Name
+            Customer Name (Optional)
           </label>
           <input
             type="text"
@@ -139,7 +161,7 @@ const Preferences = () => {
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700 flex items-center">
             <Phone className="w-4 h-4 mr-2" />
-            Phone Number
+            Phone Number (Optional)
           </label>
           <input
             type="tel"
@@ -156,7 +178,7 @@ const Preferences = () => {
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700 flex items-center">
             <Mail className="w-4 h-4 mr-2" />
-            Email Address
+            Email Address (Optional)
           </label>
           <input
             type="email"
@@ -376,9 +398,15 @@ const Preferences = () => {
                 <div>
                   <h4 className="font-medium">Customer Details</h4>
                   <div className="mt-2 space-y-2">
-                    <p>Name: {customerDetails.customerName}</p>
-                    <p>Phone: {customerDetails.customerPhone}</p>
-                    <p>Email: {customerDetails.customerEmail}</p>
+                    <p>
+                      Name: {customerDetails.customerName || "Not provided"}
+                    </p>
+                    <p>
+                      Phone: {customerDetails.customerPhone || "Not provided"}
+                    </p>
+                    <p>
+                      Email: {customerDetails.customerEmail || "Not provided"}
+                    </p>
                   </div>
                 </div>
 
@@ -402,8 +430,8 @@ const Preferences = () => {
                       <Droplet className="w-4 h-4 mr-2" />
                       Print type:{" "}
                       {preferences.printType === "BLACK_WHITE"
-                        ? "BLACK_WHITE"
-                        : "COLOR"}
+                        ? "Black & White"
+                        : "Color"}
                     </p>
                     <p className="flex items-center">
                       <FileText className="w-4 h-4 mr-2" />
@@ -413,8 +441,8 @@ const Preferences = () => {
                       <Layers className="w-4 h-4 mr-2" />
                       Print Side:{" "}
                       {preferences.printSide === "SINGLE_SIDED"
-                        ? "SINGLE_SIDED"
-                        : "DOUBLE_SIDED"}
+                        ? "Single Sided"
+                        : "Double Sided"}
                     </p>
                     <p className="flex items-center">
                       <FileText className="w-4 h-4 mr-2" />
@@ -463,6 +491,10 @@ const Preferences = () => {
         <p className="text-lg text-gray-600">
           Your token number is:{" "}
           <span className="font-bold text-blue-600">{token}</span>
+        </p>
+        <p className="text-lg text-gray-600">
+          Amount to be paid:{" "}
+          <span className="font-bold text-blue-600">{amount}</span>
         </p>
         <p className="text-sm text-gray-500">
           Please keep this token for reference when collecting your prints.
@@ -521,20 +553,12 @@ const Preferences = () => {
             onClick={nextStage}
             disabled={
               (stage === 0 && files.length === 0) ||
-              (stage === 1 &&
-                (!customerDetails.customerName ||
-                  !customerDetails.customerPhone ||
-                  !customerDetails.customerEmail)) ||
               (stage === 2 &&
                 (!preferences.paperType || !preferences.noofCopies)) ||
               stage === stages.length - 1
             }
             className={`flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
               (stage === 0 && files.length === 0) ||
-              (stage === 1 &&
-                (!customerDetails.customerName ||
-                  !customerDetails.customerPhone ||
-                  !customerDetails.customerEmail)) ||
               (stage === 2 &&
                 (!preferences.paperType || !preferences.noofCopies)) ||
               stage === stages.length - 1
