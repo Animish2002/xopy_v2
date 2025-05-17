@@ -7,7 +7,6 @@ import {
   Settings,
   HelpCircle,
   Share2,
-  Database,
   Bell,
   Shield,
 } from "lucide-react";
@@ -44,18 +43,13 @@ const adminItems = [
   },
   {
     title: "Print Reports",
-    url: "reports",
+    url: "print-reports",
     icon: FileText,
   },
   {
     title: "Analytics",
     url: "analytics",
     icon: BarChart2,
-  },
-  {
-    title: "Database",
-    url: "database",
-    icon: Database,
   },
   {
     title: "Notifications",

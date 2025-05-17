@@ -16,6 +16,11 @@ import PrintFilesViewer from "./Dashboard/ViewPrints";
 import EditPricing from "./Dashboard/EditPricing";
 import Dashboard from "./Admin/Dashboard";
 import { SocketProvider } from "./context/SocketContext";
+import SettingAdminPage from "./Admin/SettingAdminPage";
+import ShopManagment from "./Admin/ShopManagment";
+import Analytics from "./Admin/Analytics";
+import PrintReports from "./Admin/PrintReports";
+import Settings from "./Admin/Settings";
 
 function App() {
   return (
@@ -30,6 +35,11 @@ function App() {
 
             <Route element={<AdminRoute />}>
               <Route path="/admin/dashboard" element={<Dashboard />} />
+              <Route path="/admin/shops" element={<ShopManagment />} />
+              <Route path="/admin/analytics" element={<Analytics />} />
+              <Route path="/admin/print-reports" element={<PrintReports />} />
+              <Route path="/admin/settings" element={<Settings />} />
+              <Route path="/admin/profile" element={<SettingAdminPage />} />
               <Route path="/admin/users" element={<AllUser />} />
             </Route>
 
@@ -46,7 +56,7 @@ function App() {
                 path="/shopowner/view-prints"
                 element={<PrintFilesViewer />}
               />
-              <Route path="/shopowner/setting" element={<Setting />} />
+              <Route path="/shopowner/profile" element={<Setting />} />
             </Route>
 
             <Route path="*" element={<PageNotFound />} />
@@ -58,4 +68,3 @@ function App() {
 }
 
 export default App;
-
