@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 
@@ -16,6 +16,8 @@ import { Textarea } from "../components/ui/textarea";
 import image from "../assets/ContactUs.jpg";
 
 const ContactUs = () => {
+  const [submitted, setSubmitted] = useState(false);
+
   const form = useForm({
     defaultValues: {
       name: "",
@@ -24,60 +26,55 @@ const ContactUs = () => {
       message: "",
     },
   });
-  
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await fetch("https://formspree.io/f/xgvkqejg", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          message: data.message,
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        form.reset();
+      } else {
+        alert("Something went wrong. Please try again later.");
+      }
+    } catch (error) {
+      alert("Error submitting form.");
+    }
+  };
+
   const titleVariants = {
     hidden: { opacity: 0, y: -20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeInOut",
-      },
-    },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeInOut" } },
   };
 
   const formVariants = {
     hidden: { opacity: 0, x: 20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeInOut",
-        delay: 0.2,
-      },
-    },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeInOut", delay: 0.2 } },
   };
 
   const imageVariants = {
     hidden: { opacity: 0, x: -20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeInOut",
-        delay: 0.2,
-      },
-    },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeInOut", delay: 0.2 } },
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
-  };
-  
   return (
     <section id="contact-form" className="py-20 relative overflow-hidden">
-      {/* Background decorative elements */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-
-      {/* Subtle honeycomb pattern */}
       <div className="absolute inset-0 bg-honeycomb-pattern opacity-5"></div>
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
         <motion.div
           className="text-center mb-4"
           initial="hidden"
@@ -94,17 +91,13 @@ const ContactUs = () => {
           <div className="w-20 h-1 bg-yellow-400 mx-auto mb-6 rounded-full"></div>
           <p className="text-sm text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
             We'd love to hear from you! Whether you have a question, feedback,
-            or just want to say hello, our team is here to help. Reach out to us
-            using the contact information below and we'll get back to you as
-            soon as possible.
+            or just want to say hello, our team is here to help.
           </p>
         </motion.div>
 
-        {/* Contact Form and Image Section */}
-        <div className="flex flex-col lg:flex-row gap-8 items-center w-10/12 mx-auto" >
-          {/* Image */}
-          <motion.div 
-            className="w-full lg:w-1/2 rounded-xl overflow-hidden "
+        <div className="flex flex-col lg:flex-row gap-8 items-center w-10/12 mx-auto">
+          <motion.div
+            className="w-full lg:w-1/2 rounded-xl overflow-hidden"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
@@ -117,100 +110,107 @@ const ContactUs = () => {
             />
           </motion.div>
 
-          {/* Form */}
-          <motion.div 
+          <motion.div
             className="w-full lg:w-1/2 bg-white dark:bg-gray-800/50 p-8 rounded-xl shadow-lg"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
             variants={formVariants}
           >
-            <h3 className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-6 ui">Send us a message</h3>
-            
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <h3 className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-6 ui">
+              Send us a message
+            </h3>
+
+            {submitted ? (
+              <p className="text-green-600 dark:text-green-400 font-semibold">
+                Thank you! Your message has been sent.
+              </p>
+            ) : (
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Your Name"
+                              className="border-yellow-200 focus-visible:ring-yellow-500 dark:border-yellow-900/30"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Your Phone Number"
+                              className="border-yellow-200 focus-visible:ring-yellow-500 dark:border-yellow-900/30"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
                   <FormField
                     control={form.control}
-                    name="name"
+                    name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Name</FormLabel>
+                        <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Your Name" 
-                            className="border-yellow-200 focus-visible:ring-yellow-500 dark:border-yellow-900/30" 
-                            {...field} 
+                          <Input
+                            placeholder="Your Email Address"
+                            className="border-yellow-200 focus-visible:ring-yellow-500 dark:border-yellow-900/30"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
                   <FormField
                     control={form.control}
-                    name="phone"
+                    name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Phone</FormLabel>
+                        <FormLabel>Message</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Your Phone Number" 
-                            className="border-yellow-200 focus-visible:ring-yellow-500 dark:border-yellow-900/30" 
-                            {...field} 
+                          <Textarea
+                            placeholder="Your Message"
+                            className="min-h-32 border-yellow-200 focus-visible:ring-yellow-500 dark:border-yellow-900/30"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                </div>
-                
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Your Email Address" 
-                          className="border-yellow-200 focus-visible:ring-yellow-500 dark:border-yellow-900/30" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Message</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Your Message"
-                          className="min-h-32 border-yellow-200 focus-visible:ring-yellow-500 dark:border-yellow-900/30"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <Button 
-                  type="submit" 
-                  className="w-full bg-gradient-to-r from-yellow-600 to-amber-500 dark:from-yellow-500 dark:to-amber-400 hover:opacity-90 transition-opacity"
-                >
-                  Send Message
-                </Button>
-              </form>
-            </Form>
-            
+
+                  <Button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-yellow-600 to-amber-500 dark:from-yellow-500 dark:to-amber-400 hover:opacity-90 transition-opacity"
+                  >
+                    Send Message
+                  </Button>
+                </form>
+              </Form>
+            )}
+
             <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
               <p>We'll get back to you as soon as possible</p>
             </div>
