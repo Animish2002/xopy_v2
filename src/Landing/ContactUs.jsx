@@ -95,7 +95,7 @@ const ContactUs = () => {
           </p>
         </motion.div>
 
-        <div className="flex flex-col lg:flex-row gap-8 items-center w-10/12 mx-auto">
+        <div className="flex flex-col lg:flex-row gap-8 items-center md:w-10/12 mx-auto">
           <motion.div
             className="w-full lg:w-1/2 rounded-xl overflow-hidden"
             initial="hidden"
