@@ -197,7 +197,7 @@ const Navbar = () => {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <nav className="flex flex-col gap-6 mt-10">
+                <nav className="flex flex-col gap-6 mt-20 items-center">
                   <AnimatePresence>
                     {["Features", "Resources", "Pricing", "Contact"].map(
                       (item, i) => (
@@ -235,7 +235,7 @@ const Navbar = () => {
 
                   <div className="flex items-center justify-between pt-6 mt-auto">
                     <Badge variant="outline" className="rounded-full">
-                      v2.0.4
+                      xopy@v2.
                     </Badge>
                   </div>
                 </nav>
