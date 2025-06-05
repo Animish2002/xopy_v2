@@ -20,7 +20,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     // Only create socket if we have a valid backend URL
-    const SOCKET_URL = "https://server.xopy.in/socket";
+    const SOCKET_URL = "https://server.xopy.in/";
 
     if (!SOCKET_URL || !user || user.role !== "SHOP_OWNER") return; // Don't connect if no user or URL or user is not shopowner
 
