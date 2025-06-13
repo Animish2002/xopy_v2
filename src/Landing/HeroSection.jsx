@@ -105,9 +105,9 @@ const HeroSection = () => {
       },
     },
   };
-
-  const text1 = "Convenient and Secure File";
-  const text2 = "Sharing with Xopy";
+ 
+  const text1 = "No More WhatsApp or Email.";
+  const text2 = "Share Files Securely for Printing.";
   const [showText, setShowText] = useState(false);
 
   useEffect(() => {
@@ -203,10 +203,7 @@ const HeroSection = () => {
               initial="hidden"
               animate={loaded ? "visible" : "hidden"}
             >
-              Xopy makes it easy to share files of any size with your team,
-              clients, or anyone else. Our platform is designed with security
-              and convenience in mind, featuring end-to-end encryption and
-              intuitive controls.
+             Upload your documents directly via QR code. End-to-end encryption. No local copies. Complete privacy and control.
             </motion.p>
 
             {/* Buttons */}
@@ -232,7 +229,7 @@ const HeroSection = () => {
                   size="lg"
                   className="w-full sm:w-auto gap-2 px-8 rounded-full font-medium border-slate-300 dark:border-slate-700"
                 >
-                  Learn More
+                  How it works
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </motion.div>
@@ -246,22 +243,7 @@ const HeroSection = () => {
               animate={loaded ? "visible" : "hidden"}
               transition={{ delay: 1 }}
             >
-              <div className="flex flex-col">
-                <span className="text-xl md:text-2xl font-bold">10M+</span>
-                <span className="text-xs md:text-sm text-slate-500">Users</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl md:text-2xl font-bold">99.9%</span>
-                <span className="text-xs md:text-sm text-slate-500">
-                  Uptime
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl md:text-2xl font-bold">5 TB</span>
-                <span className="text-xs md:text-sm text-slate-500">
-                  Storage
-                </span>
-              </div>
+              
             </motion.div>
           </motion.div>
 
@@ -297,18 +279,6 @@ const HeroSection = () => {
                   transition={{ delay: 1.2, duration: 0.8 }}
                 >
                   <Card className="shadow-lg w-44 md:w-56 bg-white/90 backdrop-blur border-0">
-                    <CardContent className="md:p-4 p-2">
-                      <div className="flex items-center mb-2">
-                        <Download className="h-5 w-5 text-green-500 mr-2" />
-                        <span className="text-sm font-medium">
-                          Download Stats
-                        </span>
-                      </div>
-                      <div className="text-xl md:text-2xl font-bold">350M+</div>
-                      <div className="text-xs text-slate-500">
-                        Files shared last month
-                      </div>
-                    </CardContent>
                   </Card>
                 </motion.div>
               </motion.div>

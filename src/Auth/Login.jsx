@@ -113,7 +113,7 @@ const Signup = () => {
             <span className="text-gray-600">New to our platform? </span>
             <Link
               to="/auth/register"
-              className="font-medium text-blue-600 hover:text-blue-500 underline-offset-4 hover:underline"
+              className="font-medium text-yellow-500 hover:text-yellow-400 underline-offset-4 hover:underline"
             >
               Create an account
             </Link>
@@ -171,7 +171,7 @@ const Signup = () => {
                   </label>
                   <Link
                     to="/forgetPassword"
-                    className="text-sm font-medium text-blue-600 hover:text-blue-500"
+                    className="text-sm font-medium text-yellow-500 hover:text-yellow-400"
                   >
                     Forgot password?
                   </Link>
@@ -205,7 +205,7 @@ const Signup = () => {
 
               <Button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium"
+                className="w-full bg-yellow-500 hover:bg-yellow-400 text-white font-medium"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -219,11 +219,11 @@ const Signup = () => {
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="flex justify-center border-t p-4">
+          {/* <CardFooter className="flex justify-center border-t p-4">
             <p className="text-sm text-gray-600">
               Protected by industry-standard security practices
             </p>
-          </CardFooter>
+          </CardFooter> */}
         </Card>
       </div>
     </div>
