@@ -47,7 +47,9 @@ const Preferences = () => {
         file.type === "application/pdf" ||
         file.type === "application/msword" ||
         file.type ===
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+        file.type === "image/jpeg" ||
+        file.type === "image/png"
     );
 
     if (validFiles.length !== newFiles.length) {
@@ -343,14 +345,14 @@ const Preferences = () => {
               >
                 <Upload className="w-12 h-12 mb-2 text-blue-500" />
                 <span className="text-sm text-gray-500">
-                  Upload PDF, DOC, or DOCX files
+                  Upload PDF, DOC, DOCX, PNG, or JPEG files
                 </span>
                 <input
                   id="file-upload"
                   type="file"
                   className="hidden"
                   onChange={handleFileChange}
-                  accept=".pdf,.doc,.docx"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                   multiple
                 />
               </label>

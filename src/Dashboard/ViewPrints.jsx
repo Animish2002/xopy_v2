@@ -62,6 +62,119 @@ import {
 } from "../components/ui/sheet";
 import Layout from "./Layout";
 
+const getFileType = (fileName, fileUrl) => {
+  const extension = fileName.split(".").pop().toLowerCase();
+  const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp", "svg"];
+  const pdfExtensions = ["pdf"];
+  const docExtensions = ["doc", "docx"];
+  const textExtensions = ["txt", "rtf"];
+
+  if (imageExtensions.includes(extension)) return "image";
+  if (pdfExtensions.includes(extension)) return "pdf";
+  if (docExtensions.includes(extension)) return "document";
+  if (textExtensions.includes(extension)) return "text";
+
+  // Fallback: check URL for Google Docs viewer
+  if (fileUrl && fileUrl.includes("docs.google.com")) return "document";
+
+  return "other";
+};
+
+const FilePreview = ({ file, showWatermark, preventDownload }) => {
+  const fileType = getFileType(file.fileName, file.fileUrl);
+
+  switch (fileType) {
+    case "image":
+      return (
+        <div className="flex justify-center items-center bg-gray-50 min-h-[600px] p-4">
+          <img
+            src={file.fileUrl}
+            alt={file.fileName}
+            className="max-w-full max-h-[600px] object-contain shadow-lg rounded"
+            onContextMenu={preventDownload}
+            onDragStart={(e) => e.preventDefault()}
+            style={{
+              pointerEvents: showWatermark ? "none" : "auto",
+              userSelect: "none",
+            }}
+          />
+        </div>
+      );
+
+    case "pdf":
+      return (
+        <iframe
+          src={file.fileUrl}
+          className="w-full h-[600px] border-none"
+          title={file.fileName}
+          onContextMenu={preventDownload}
+          style={{
+            pointerEvents: showWatermark ? "none" : "auto",
+          }}
+        />
+      );
+
+    case "document":
+      // For Word docs, try Google Docs viewer first, then iframe
+      const viewerUrl = file.fileUrl.includes("docs.google.com")
+        ? file.fileUrl
+        : `https://docs.google.com/viewer?url=${encodeURIComponent(
+            file.fileUrl
+          )}&embedded=true`;
+
+      return (
+        <iframe
+          src={viewerUrl}
+          className="w-full h-[600px] border-none"
+          title={file.fileName}
+          onContextMenu={preventDownload}
+          style={{
+            pointerEvents: showWatermark ? "none" : "auto",
+          }}
+        />
+      );
+
+    case "text":
+      return (
+        <div className="p-6 bg-white min-h-[600px]">
+          <div className="bg-gray-50 p-4 rounded border font-mono text-sm">
+            <iframe
+              src={file.fileUrl}
+              className="w-full h-[500px] border-none"
+              title={file.fileName}
+              onContextMenu={preventDownload}
+              style={{
+                pointerEvents: showWatermark ? "none" : "auto",
+              }}
+            />
+          </div>
+        </div>
+      );
+
+    default:
+      return (
+        <div className="flex flex-col justify-center items-center bg-gray-50 min-h-[600px] p-4">
+          <div className="text-center">
+            <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              {file.fileName}
+            </h3>
+            <p className="text-gray-500 mb-4">
+              This file type cannot be previewed directly.
+            </p>
+            <Button
+              onClick={() => window.open(file.fileUrl, "_blank")}
+              variant="outline"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Open in New Tab
+            </Button>
+          </div>
+        </div>
+      );
+  }
+};
+
 const PrintFilesViewer = () => {
   const [printJobs, setPrintJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -169,6 +282,17 @@ const PrintFilesViewer = () => {
       setLoading(false);
     }
   };
+
+  // Function to convert ISO date string to dd/mm/yy format
+  function formatToddmmyy(isoDateString) {
+    const date = new Date(isoDateString);
+
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() returns 0-11
+    const year = String(date.getFullYear()).slice(-2); // Get last 2 digits of year
+
+    return `${day}/${month}/${year}`;
+  }
 
   const handleFileSelect = (job, file) => {
     setSelectedJob(job);
@@ -566,7 +690,7 @@ const PrintFilesViewer = () => {
                           {selectedJob.status}
                         </Badge>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      {/* <div className="flex items-center space-x-2">
                         <Button variant="outline" size="sm">
                           <ArrowLeft className="h-4 w-4 mr-2" />
                           Previous
@@ -575,7 +699,7 @@ const PrintFilesViewer = () => {
                           Next
                           <ArrowRight className="h-4 w-4 ml-2" />
                         </Button>
-                      </div>
+                      </div> */}
                     </div>
                   </CardHeader>
                   <CardContent className="p-0">
@@ -656,17 +780,40 @@ const PrintFilesViewer = () => {
                         <div className="border-b border-gray-100">
                           <div className="px-6 py-2 flex items-center overflow-x-auto scrollbar-hide">
                             <TabsList className="bg-transparent">
-                              {selectedJob.files.map((file) => (
-                                <TabsTrigger
-                                  key={file.id}
-                                  value={file.id}
-                                  onClick={() => setSelectedFile(file)}
-                                  className="data-[state=active]:bg-blue-50 data-[state=active]:shadow-none"
-                                >
-                                  <FileText className="h-4 w-4 mr-2" />
-                                  {file.fileName}
-                                </TabsTrigger>
-                              ))}
+                              {selectedJob.files.map((file) => {
+                                const fileType = getFileType(
+                                  file.fileName,
+                                  file.fileUrl
+                                );
+                                const getFileIcon = () => {
+                                  switch (fileType) {
+                                    case "image":
+                                      return "🖼️";
+                                    case "pdf":
+                                      return "📄";
+                                    case "document":
+                                      return "📝";
+                                    case "text":
+                                      return "📋";
+                                    default:
+                                      return "📎";
+                                  }
+                                };
+
+                                return (
+                                  <TabsTrigger
+                                    key={file.id}
+                                    value={file.id}
+                                    onClick={() => setSelectedFile(file)}
+                                    className="data-[state=active]:bg-blue-50 data-[state=active]:shadow-none"
+                                  >
+                                    <span className="mr-2">
+                                      {getFileIcon()}
+                                    </span>
+                                    {file.fileName}
+                                  </TabsTrigger>
+                                );
+                              })}
                             </TabsList>
                           </div>
                         </div>
@@ -677,14 +824,10 @@ const PrintFilesViewer = () => {
                             value={file.id}
                             className="m-0"
                           >
-                            <iframe
-                              src={file.fileUrl}
-                              className="w-full h-[600px] border-none"
-                              title={file.fileName}
-                              onContextMenu={preventDownload}
-                              style={{
-                                pointerEvents: showWatermark ? "none" : "auto",
-                              }}
+                            <FilePreview
+                              file={file}
+                              showWatermark={showWatermark}
+                              preventDownload={preventDownload}
                             />
                           </TabsContent>
                         ))}
@@ -694,7 +837,7 @@ const PrintFilesViewer = () => {
                   <CardFooter className="border-t border-gray-100 justify-between">
                     <div className="flex items-center text-sm text-gray-500">
                       <Clock className="h-4 w-4 mr-2" />
-                      Last updated: Today
+                      Last updated: {formatToddmmyy(selectedJob.createdAt)}
                     </div>
                     {selectedJob.status.toLowerCase() !== "completed" && (
                       <Button
