@@ -21,6 +21,7 @@ import ShopManagment from "./Admin/ShopManagment";
 import Analytics from "./Admin/Analytics";
 import PrintReports from "./Admin/PrintReports";
 import Settings from "./Admin/Settings";
+import ContactSupport from "./Dashboard/ContactSupport";
 
 function App() {
   return (
@@ -57,6 +58,10 @@ function App() {
                 element={<PrintFilesViewer />}
               />
               <Route path="/shopowner/profile" element={<Setting />} />
+              <Route
+                path="/shopowner/contact-support"
+                element={<ContactSupport />}
+              />
             </Route>
 
             <Route path="*" element={<PageNotFound />} />

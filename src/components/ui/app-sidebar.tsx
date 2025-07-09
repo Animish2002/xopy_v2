@@ -7,7 +7,6 @@ import {
   QrCode,
   DollarSign,
   ClipboardList,
-
 } from "lucide-react";
 import {
   Sidebar,
@@ -94,15 +93,22 @@ export function AppSidebar() {
         </div>
         <div className="space-y-2">
           <a
-            href="#"
+            href="/shopowner/contact-support"
             className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
           >
             <HelpCircle className="w-4 h-4" />
             <span>Contact Support</span>
           </a>
           <a
-            href="#"
+            
             className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+            onClick={(e) => {
+              e.preventDefault();
+              navigator.share({
+                title: "Xopy App",
+                url: "https://www.xopy.in/auth/signin",
+              });
+            }}
           >
             <Share2 className="w-4 h-4" />
             <span>Share App</span>
