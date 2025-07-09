@@ -441,7 +441,7 @@ const PrintFilesViewer = () => {
                         <Printer className="h-5 w-5 mr-2" /> Print Jobs
                       </SheetTitle>
                     </SheetHeader>
-                    <div className="pt-6">
+                    <div className="pt-2">
                       <Tabs
                         defaultValue="all"
                         value={selectedTab}
@@ -487,7 +487,7 @@ const PrintFilesViewer = () => {
                 </Sheet>
               </div>
 
-              <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 flex-1 max-w-xl mx-4">
+              {/* <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 flex-1 max-w-xl mx-4">
                 <Search className="h-4 w-4 text-gray-500 mr-2" />
                 <Input
                   type="text"
@@ -496,7 +496,7 @@ const PrintFilesViewer = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-              </div>
+              </div> */}
 
               <div className="flex items-center space-x-2">
                 <Button variant="ghost" size="icon" onClick={fetchFiles}>
@@ -655,7 +655,7 @@ const PrintFilesViewer = () => {
             </div>
 
             {/* Mobile Search Bar */}
-            <div className="md:hidden mb-4">
+            {/* <div className="md:hidden mb-4">
               <div className="flex items-center bg-white rounded-lg border px-3 py-2">
                 <Search className="h-4 w-4 text-gray-500 mr-2" />
                 <Input
@@ -666,13 +666,13 @@ const PrintFilesViewer = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* Main Content Area */}
-            <div className="flex-1">
+            <div className="flex-1 relative">
               {selectedJob && selectedFile ? (
-                <Card>
-                  <CardHeader className="border-b border-gray-100 pb-3">
+                <Card className="gap-2">
+                  <CardHeader className="border-b border-gray-100">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <Button
@@ -690,21 +690,11 @@ const PrintFilesViewer = () => {
                           {selectedJob.status}
                         </Badge>
                       </div>
-                      {/* <div className="flex items-center space-x-2">
-                        <Button variant="outline" size="sm">
-                          <ArrowLeft className="h-4 w-4 mr-2" />
-                          Previous
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          Next
-                          <ArrowRight className="h-4 w-4 ml-2" />
-                        </Button>
-                      </div> */}
                     </div>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <div className="p-6 border-b border-gray-100">
-                      <div className="flex flex-wrap items-center gap-4 mb-4">
+                    <div className="px-6 p-2 border-b border-gray-100">
+                      <div className="flex flex-wrap items-center gap-4 mb-2">
                         <div className="font-semibold text-lg">
                           Print Job #{selectedJob.tokenNumber}
                         </div>
@@ -712,7 +702,19 @@ const PrintFilesViewer = () => {
                           {selectedJob.customerName}
                         </div>
                       </div>
-                      <div className="flex flex-wrap gap-6">
+                      <div className="absolute top-6 right-4 flex items-center space-x-2">
+                        
+                        {selectedJob.status.toLowerCase() !== "completed" && (
+                          <Button
+                            onClick={() => handleStatusUpdate(selectedJob.id)}
+                            disabled={updatingStatus}
+                          >
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                            Mark as Completed
+                          </Button>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
                         <div className="flex items-center">
                           <User className="w-4 h-4 text-gray-500 mr-2" />
                           <span className="text-sm">
@@ -734,11 +736,11 @@ const PrintFilesViewer = () => {
                       </div>
                     </div>
                     {/* Print Details */}
-                    <div className="p-6 border-t border-gray-100">
+                    <div className="px-6 p-2 border-t border-gray-100">
                       <h3 className="font-semibold text-gray-900 mb-4">
                         Print Specifications
                       </h3>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
                         <div>
                           <p className="text-sm text-gray-500">Copies</p>
                           <p className="font-medium">
@@ -839,19 +841,11 @@ const PrintFilesViewer = () => {
                       <Clock className="h-4 w-4 mr-2" />
                       Last updated: {formatToddmmyy(selectedJob.createdAt)}
                     </div>
-                    {selectedJob.status.toLowerCase() !== "completed" && (
-                      <Button
-                        onClick={() => handleStatusUpdate(selectedJob.id)}
-                        disabled={updatingStatus}
-                      >
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Mark as Completed
-                      </Button>
-                    )}
+                    
                   </CardFooter>
                 </Card>
               ) : (
-                <Card className="h-[600px] flex items-center justify-center">
+                <Card className="h-[500px] flex items-center justify-center">
                   <div className="text-center">
                     <div className="bg-gray-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                       <FileText className="h-8 w-8 text-gray-500" />
