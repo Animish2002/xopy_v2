@@ -131,7 +131,7 @@ const Navbar = () => {
           whileHover="hover"
         >
           <a href="/" onClick={(e) => handleNavigation("/", e)}>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4 ml-10">
               <img src={Logo} alt="Company Logo" className="h-20" />
             </div>
           </a>
