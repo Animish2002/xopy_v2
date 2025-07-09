@@ -40,6 +40,19 @@ const Preferences = () => {
   const [token, setToken] = useState(null);
   const [amount, setAmount] = useState(0);
 
+  const paperSizes = [
+    { value: "A4", label: "A4", description: "210×297mm" },
+    { value: "A3", label: "A3", description: "297×420mm" },
+    { value: "A5", label: "A5", description: "148×210mm" },
+    { value: "Letter", label: "Letter", description: "8.5×11in" },
+    { value: "Legal", label: "Legal", description: "8.5×14in" },
+  ];
+
+  const printSides = [
+    { value: "SINGLE_SIDED", label: "Single Sided", icon: "📄" },
+    { value: "DOUBLE_SIDED", label: "Double Sided", icon: "📃" },
+  ];
+
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
     const validFiles = newFiles.filter(
@@ -264,47 +277,64 @@ const Preferences = () => {
             </label>
           </div>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-4 mb-8">
           <label className="block text-sm font-medium text-gray-700 flex items-center">
             <FileText className="w-4 h-4 mr-2" />
             Paper Size
           </label>
-          <select
-            value={preferences.paperType}
-            onChange={(e) =>
-              setPreferences((prev) => ({
-                ...prev,
-                paperType: e.target.value,
-              }))
-            }
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-          >
-            <option value="">Select paper size</option>
-            <option value="A4">A4</option>
-            <option value="A3">A3</option>
-            <option value="A5">A5</option>
-            <option value="Letter">Letter</option>
-            <option value="Legal">Legal</option>
-          </select>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {paperSizes.map((size) => (
+              <button
+                key={size.value}
+                onClick={() =>
+                  setPreferences((prev) => ({ ...prev, paperType: size.value }))
+                }
+                className={`relative p-4 rounded-lg border-2 transition-all duration-200 hover:shadow-md ${
+                  preferences.paperType === size.value
+                    ? "border-blue-500 bg-blue-50 shadow-md"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                {preferences.paperType === size.value && (
+                  <Check className="absolute top-2 right-2 w-4 h-4 text-blue-500" />
+                )}
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-gray-800">
+                    {size.label}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {size.description}
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="space-y-2">
+
+        {/* Print Side - Toggle Switch Style */}
+        <div className="space-y-4 mb-8">
           <label className="block text-sm font-medium text-gray-700 flex items-center">
             <Layers className="w-4 h-4 mr-2" />
             Print Side
           </label>
-          <select
-            value={preferences.printSide}
-            onChange={(e) =>
-              setPreferences((prev) => ({
-                ...prev,
-                printSide: e.target.value,
-              }))
-            }
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-          >
-            <option value="SINGLE_SIDED">Single Sided</option>
-            <option value="DOUBLE_SIDED">Double Sided</option>
-          </select>
+          <div className="flex bg-gray-100 rounded-lg p-1">
+            {printSides.map((side) => (
+              <button
+                key={side.value}
+                onClick={() =>
+                  setPreferences((prev) => ({ ...prev, printSide: side.value }))
+                }
+                className={`flex-1 flex items-center justify-center px-4 py-3 rounded-md transition-all duration-200 ${
+                  preferences.printSide === side.value
+                    ? "bg-white shadow-sm text-blue-600 font-medium"
+                    : "text-gray-600 hover:text-gray-800"
+                }`}
+              >
+                <span className="mr-2">{side.icon}</span>
+                {side.label}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700 flex items-center">
