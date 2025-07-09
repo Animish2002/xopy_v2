@@ -53,6 +53,23 @@ const Preferences = () => {
     { value: "DOUBLE_SIDED", label: "Double Sided", icon: "📃" },
   ];
 
+  const printTypes = [
+    {
+      value: "BLACK_WHITE",
+      label: "Black & White",
+      icon: "⚫",
+      color: "bg-gray-100",
+      selectedColor: "bg-gray-500",
+    },
+    {
+      value: "COLOR",
+      label: "Color",
+      icon: "🌈",
+      color: "bg-gradient-to-r from-red-100 to-blue-100",
+      selectedColor: "bg-gradient-to-r from-red-500 to-blue-500",
+    },
+  ];
+
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
     const validFiles = newFiles.filter(
@@ -216,7 +233,7 @@ const Preferences = () => {
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
-      className="space-y-6"
+      className="space-y-2"
     >
       <div className="bg-white p-6 rounded-lg shadow-md space-y-6">
         <div className="space-y-2">
@@ -240,56 +257,40 @@ const Preferences = () => {
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700 flex items-center">
             <Droplet className="w-4 h-4 mr-2" />
-            Print type
+            Print Type
           </label>
-          <div className="flex space-x-4">
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-radio text-blue-600"
-                name="printType"
-                value="BLACK_WHITE"
-                checked={preferences.printType === "BLACK_WHITE"}
-                onChange={(e) =>
-                  setPreferences((prev) => ({
-                    ...prev,
-                    printType: e.target.value,
-                  }))
+          <div className="flex bg-gray-100 rounded-lg p-1">
+            {printTypes.map((type) => (
+              <button
+                key={type.value}
+                onClick={() =>
+                  setPreferences((prev) => ({ ...prev, printType: type.value }))
                 }
-              />
-              <span className="ml-2">Black & White</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-radio text-blue-600"
-                name="printType"
-                value="COLOR"
-                checked={preferences.printType === "COLOR"}
-                onChange={(e) =>
-                  setPreferences((prev) => ({
-                    ...prev,
-                    printType: e.target.value,
-                  }))
-                }
-              />
-              <span className="ml-2">Color</span>
-            </label>
+                className={`flex-1 w-10 h-14 flex items-center justify-center px-6 py-4 rounded-md transition-all duration-200 ${
+                  preferences.printType === type.value
+                    ? "bg-white shadow-sm text-blue-600 font-medium border-2 border-blue-200"
+                    : "text-gray-600 hover:text-gray-800"
+                }`}
+              >
+                <span className="text-base">{type.icon}</span>
+                <span className="text-base">{type.label}</span>
+              </button>
+            ))}
           </div>
         </div>
-        <div className="space-y-4 mb-8">
+        <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700 flex items-center">
             <FileText className="w-4 h-4 mr-2" />
             Paper Size
           </label>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 md:grid-cols-3 gap-3">
             {paperSizes.map((size) => (
               <button
                 key={size.value}
                 onClick={() =>
                   setPreferences((prev) => ({ ...prev, paperType: size.value }))
                 }
-                className={`relative p-4 rounded-lg border-2 transition-all duration-200 hover:shadow-md ${
+                className={`relative p-4 rounded-lg border-2 transition-all duration-200 hover:shadow-md w-26 h-18 ${
                   preferences.paperType === size.value
                     ? "border-blue-500 bg-blue-50 shadow-md"
                     : "border-gray-200 hover:border-gray-300"
@@ -299,7 +300,7 @@ const Preferences = () => {
                   <Check className="absolute top-2 right-2 w-4 h-4 text-blue-500" />
                 )}
                 <div className="text-center">
-                  <div className="text-lg font-semibold text-gray-800">
+                  <div className="text-base font-semibold text-gray-800">
                     {size.label}
                   </div>
                   <div className="text-sm text-gray-500">
@@ -312,7 +313,7 @@ const Preferences = () => {
         </div>
 
         {/* Print Side - Toggle Switch Style */}
-        <div className="space-y-4 mb-8">
+        <div>
           <label className="block text-sm font-medium text-gray-700 flex items-center">
             <Layers className="w-4 h-4 mr-2" />
             Print Side
@@ -330,13 +331,13 @@ const Preferences = () => {
                     : "text-gray-600 hover:text-gray-800"
                 }`}
               >
-                <span className="mr-2">{side.icon}</span>
-                {side.label}
+                <span className="text-base">{side.icon}</span>
+                <span className="text-base">{side.label}</span>
               </button>
             ))}
           </div>
         </div>
-        <div className="space-y-2">
+        <div>
           <label className="block text-sm font-medium text-gray-700 flex items-center">
             <FileText className="w-4 h-4 mr-2" />
             Specific Pages (e.g., 1-5,7,9)
