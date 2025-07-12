@@ -12,7 +12,7 @@ import Home from "./Landing/Home";
 import ViewPricing from "./Dashboard/ViewPricing";
 import AllUser from "./Admin/AllUser";
 import PageNotFound from "./PageNotFound";
-import PrintFilesViewer from "./Dashboard/ViewPrints";
+import PrintFilesViewer from "./Dashboard/PrintFilesViewer";
 import EditPricing from "./Dashboard/EditPricing";
 import Dashboard from "./Admin/Dashboard";
 import { SocketProvider } from "./context/SocketContext";
