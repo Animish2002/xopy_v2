@@ -105,9 +105,9 @@ const HeroSection = () => {
       },
     },
   };
- 
-  const text1 = "No More WhatsApp or Email.";
-  const text2 = "Share Files Securely for Printing.";
+
+  const text1 = "No More WhatsApp or Email";
+  const text2 = "Secure Centralized Files Printing";
   const [showText, setShowText] = useState(false);
 
   useEffect(() => {
@@ -170,7 +170,7 @@ const HeroSection = () => {
                   initial="hidden"
                   animate="visible"
                 >
-                  <div className="px-1.5 md:px-0">
+                  <div className="px-1 md:px-0 md:text-5xl text-[27px]">
                     {text1.split("").map((char, index) => (
                       <motion.span
                         key={`line1-${index}`}
@@ -180,7 +180,7 @@ const HeroSection = () => {
                       </motion.span>
                     ))}
                   </div>
-                  <div>
+                  <div className="md:text-5xl text-[27px] px-1 md:px-0">
                     {text2.split("").map((char, index) => (
                       <motion.span
                         key={`line2-${index}`}
@@ -198,12 +198,13 @@ const HeroSection = () => {
 
             {/* Description */}
             <motion.p
-              className="text-base md:text-lg text-slate-600 dark:text-slate-300 mb-8 max-w-lg"
+              className="text-sm md:text-lg text-slate-600 dark:text-slate-300 mb-8 max-w-lg"
               variants={fadeIn}
               initial="hidden"
               animate={loaded ? "visible" : "hidden"}
             >
-             Upload your documents directly via QR code. End-to-end encryption. No local copies. Complete privacy and control.
+              Upload your documents directly via QR code. End-to-end encryption.
+              No local copies. Complete privacy and control.
             </motion.p>
 
             {/* Buttons */}
@@ -242,9 +243,7 @@ const HeroSection = () => {
               initial="hidden"
               animate={loaded ? "visible" : "hidden"}
               transition={{ delay: 1 }}
-            >
-              
-            </motion.div>
+            ></motion.div>
           </motion.div>
 
           {/* Image Section */}
@@ -278,8 +277,7 @@ const HeroSection = () => {
                   animate={loaded ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 1.2, duration: 0.8 }}
                 >
-                  <Card className="shadow-lg w-44 md:w-56 bg-white/90 backdrop-blur border-0">
-                  </Card>
+                  <Card className="shadow-lg w-44 md:w-56 bg-white/90 backdrop-blur border-0"></Card>
                 </motion.div>
               </motion.div>
             </div>

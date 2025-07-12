@@ -141,11 +141,14 @@ const Navbar = () => {
         <div className="hidden md:block">
           <NavigationMenu>
             <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className={navigationMenuTriggerStyle()}
-                 
-                >
+              <NavigationMenuItem
+                className={`${
+                  isScrolled
+                    ? "bg-white/80 dark:bg-slate-900/80"
+                    : "bg-transparent"
+                } ${isDarkMode ? "dark" : ""}`}
+              >
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   <button onClick={(e) => handleNavigation("/features", e)}>
                     Features
                   </button>

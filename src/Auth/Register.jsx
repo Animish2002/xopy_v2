@@ -134,7 +134,7 @@ const Register = () => {
         <img src={logo} alt="Xopy Logo" className="md:h-24 h-20 w-auto" />
       </div>
 
-      <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center bg-white rounded-lg shadow-2xl md:p-8 p-4 md:mt-0 mt-16">
+      <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center bg-white rounded-lg shadow-2xl md:p-8 p-4 md:mt-0 mt-16 m-4">
         {/* Left Column - Info */}
         <div className="space-y-6 md:p-4 p-2">
           <div className="space-y-4">
