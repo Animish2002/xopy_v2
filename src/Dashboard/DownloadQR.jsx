@@ -155,7 +155,7 @@ const DownloadQR = () => {
                 {/* Your commented out CardTitle/Badge remains here */}
               </CardHeader>
 
-              <CardContent className="pt-6">
+              <CardContent className="pt-4">
                 {error && (
                   <Alert variant="destructive" className="mb-6">
                     <AlertDescription>{error}</AlertDescription>
@@ -178,12 +178,12 @@ const DownloadQR = () => {
                       }}
                     >
                       {/* Logo header */}
-                      <div className="flex items-center justify-center mb-6">
+                      <div className="flex items-center justify-center mb-2">
                         <Avatar className="w-40 h-30 mr-2">
                           <img
                             src={logo}
                             alt="Xopy Logo"
-                            className="w-full h-full"
+                            className="w-32 h-24"
                             crossOrigin="anonymous" // Essential for canvas rendering to avoid CORS issues
                           />
                         </Avatar>
